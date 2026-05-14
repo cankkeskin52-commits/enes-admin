@@ -8,6 +8,7 @@
   "theme_color": "#020810",
   "orientation": "portrait",
   "icons": [
-    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"},
+    {"src": "logo.svg", "sizes": "any", "type": "image/svg+xml"}
   ]
 }

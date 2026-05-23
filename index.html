@@ -173,6 +173,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .notify-msg-input:focus{border-color:var(--teal);}
 .notify-btn{background:linear-gradient(135deg,rgba(37,211,102,.2),rgba(37,211,102,.1));border:.5px solid rgba(37,211,102,.4);border-radius:10px;padding:11px;font-size:12px;font-weight:700;color:#25d366;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;width:100%;}
 
+/* ── ALERT CARDS ── */
+.alert-card{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:14px;margin:0 14px 8px;display:flex;align-items:center;gap:12px;}
+.alert-card.new{border-color:rgba(224,85,85,.35);background:linear-gradient(135deg,rgba(224,85,85,.07),var(--card));}
+.alert-fish-ico{width:42px;height:42px;border-radius:10px;background:rgba(224,85,85,.1);border:.5px solid rgba(224,85,85,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.alert-info{flex:1;min-width:0;}
+.alert-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.alert-fish{font-size:11px;color:var(--red);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.alert-meta{font-size:9px;color:var(--text2);margin-top:2px;}
+.alert-actions{display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;}
+.wa-alert-btn{background:rgba(37,211,102,.1);border:.5px solid rgba(37,211,102,.3);color:#25d366;font-size:10px;padding:6px 10px;border-radius:7px;text-decoration:none;font-weight:600;white-space:nowrap;}
+.clear-btn{background:var(--red2);border:.5px solid rgba(224,85,85,.3);color:var(--red);font-size:9px;padding:5px 8px;border-radius:7px;cursor:pointer;letter-spacing:.06em;white-space:nowrap;}
+
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(2,8,16,.85);z-index:50;display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.open{display:flex;}
@@ -278,11 +290,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
         <div class="dc-val gold" id="d-subs">—</div>
         <div class="dc-sub">kişi</div>
       </div>
-      <div class="dc c-red wide" onclick="goTab('reviews')">
+      <div class="dc c-red" onclick="goTab('reviews')">
         <div class="dc-ico">💬</div>
         <div class="dc-lbl">Yorumlar</div>
         <div class="dc-val red" id="d-rv">—</div>
         <div class="dc-sub">yorum</div>
+      </div>
+      <div class="dc c-red" onclick="goTab('alerts')" style="--ac:rgba(224,85,85,.1);">
+        <div class="dc-ico">🔔</div>
+        <div class="dc-lbl">Stok İsteği</div>
+        <div class="dc-val red" id="d-alerts">—</div>
+        <div class="dc-sub">bekliyor</div>
       </div>
     </div>
     <div class="dash-status">
@@ -423,6 +441,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div id="review-list"></div>
   </div>
 
+  <!-- BİLDİRİMLER -->
+  <div class="page" id="page-alerts">
+    <div class="sec-lbl" id="alerts-lbl">GELİNCE HABER VER İSTEKLERİ</div>
+    <div id="alerts-list"></div>
+  </div>
+
   <!-- ABONELER -->
   <div class="page" id="page-subs">
     <div class="notify-card">
@@ -435,7 +459,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
   </div>
 
   <!-- Bottom Nav -->
-  <div class="bnav">
+  <div class="bnav" style="grid-template-columns:repeat(6,1fr);">
     <div class="bnav-item active" data-tab="dash" onclick="goTab('dash')">
       <div class="bnav-icon">🏠</div>
       <div class="bnav-label">Panel</div>
@@ -451,6 +475,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div class="bnav-item" data-tab="aq" onclick="goTab('aq')">
       <div class="bnav-icon">🪸</div>
       <div class="bnav-label">Akvaryum</div>
+    </div>
+    <div class="bnav-item" data-tab="alerts" onclick="goTab('alerts')" style="position:relative;">
+      <div class="bnav-icon">🔔</div>
+      <div class="bnav-badge" id="alert-badge"></div>
+      <div class="bnav-label">Stok</div>
     </div>
     <div class="bnav-item" data-tab="subs" onclick="goTab('subs')">
       <div class="bnav-icon">👥</div>
@@ -473,7 +502,8 @@ const BASE = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 const SESSION_KEY = 'ea_admin_logged';
 
 /* ══ STATE ══ */
-let fishList = [], plantList = [], aqList = [], reviewList = [], subList = [];
+let fishList = [], plantList = [], aqList = [], reviewList = [], subList = [], stockAlerts = [];
+let _visits = 0;
 let editFishIdx = -1, editPlantIdx = -1, editAqIdx = -1;
 let fishImgUrl = '', plantImgUrl = '', aqImgUrl = '';
 let fishFile = null, plantFile = null, aqFile = null;
@@ -538,6 +568,8 @@ async function loadData() {
     aqList = d.record.aquariums || [];
     reviewList = d.record.reviews || [];
     subList = d.record.subscribers || [];
+    stockAlerts = d.record.stockAlerts || [];
+    _visits = d.record.visits || 0;
     localStorage.setItem('ea_admin_cache', JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList }));
     setSyncDot('ok');
     updateDash();
@@ -560,7 +592,7 @@ async function saveAll(statusEl) {
     const r = await fetch(BASE, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Master-Key': BIN_KEY },
-      body: JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList })
+      body: JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList, stockAlerts, visits: _visits })
     });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     localStorage.setItem('ea_admin_cache', JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList }));
@@ -580,6 +612,10 @@ function updateDash() {
   document.getElementById('d-aq').textContent = aqList.length;
   document.getElementById('d-subs').textContent = subList.length;
   document.getElementById('d-rv').textContent = reviewList.length;
+  document.getElementById('d-alerts').textContent = stockAlerts.length;
+  const badge = document.getElementById('alert-badge');
+  if (stockAlerts.length) { badge.textContent = stockAlerts.length; badge.classList.add('show'); }
+  else { badge.classList.remove('show'); }
 }
 
 function renderAll() {
@@ -588,6 +624,7 @@ function renderAll() {
   renderAqList();
   renderReviewList();
   renderSubList();
+  renderAlertList();
 }
 
 /* ══ CLOUDINARY UPLOAD ══ */
@@ -994,6 +1031,43 @@ function renderSubList() {
         <button class="act-btn act-del" onclick="deleteSub(${i})">Sil</button>
       </div>
     </div>`).join('');
+}
+
+/* ══ STOK BİLDİRİMLERİ ══ */
+function renderAlertList() {
+  const el = document.getElementById('alerts-list');
+  const lbl = document.getElementById('alerts-lbl');
+  if (!el) return;
+  lbl.textContent = `GELİNCE HABER VER İSTEKLERİ (${stockAlerts.length})`;
+  if (!stockAlerts.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-ico">🔔</div><div class="empty-txt">Henüz stok bildirimi yok</div></div>';
+    return;
+  }
+  el.innerHTML = [...stockAlerts].reverse().map((a, ri) => {
+    const i = stockAlerts.length - 1 - ri;
+    const phone = (a.phone || '').replace(/\D/g, '').replace(/^0/, '90');
+    const waMsg = encodeURIComponent('Merhaba ' + a.name + '! ' + a.fish + ' stoklarımıza geldi. Hemen sipariş verebilirsiniz! 🐠 enesakvaryum.com.tr');
+    return `
+    <div class="alert-card new">
+      <div class="alert-fish-ico">🐠</div>
+      <div class="alert-info">
+        <div class="alert-name">${a.name}</div>
+        <div class="alert-fish">🐟 ${a.fish}</div>
+        <div class="alert-meta">${a.phone} · ${a.date || ''}</div>
+      </div>
+      <div class="alert-actions">
+        <a class="wa-alert-btn" href="https://wa.me/${phone}?text=${waMsg}" target="_blank">📲 WA</a>
+        <button class="clear-btn" onclick="clearAlert(${i})">✓ Temizle</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function clearAlert(i) {
+  stockAlerts.splice(i, 1);
+  const ok = await saveAll();
+  if (ok) { toast('Bildirim temizlendi ✓', 'ok'); renderAlertList(); updateDash(); }
+  else stockAlerts.splice(i, 0, stockAlerts[i]);
 }
 
 function doNotify() {

@@ -71,7 +71,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .logout-btn{font-size:11px;color:var(--text2);padding:5px 10px;border:.5px solid var(--border2);border-radius:8px;cursor:pointer;letter-spacing:.08em;}
 
 /* ── BOTTOM NAV ── */
-.bnav{display:grid;grid-template-columns:repeat(5,1fr);background:rgba(2,8,16,.97);border-top:.5px solid var(--border);}
+.bnav{display:flex;overflow-x:auto;scrollbar-width:none;background:rgba(2,8,16,.97);border-top:.5px solid var(--border);}
+.bnav::-webkit-scrollbar{display:none;}
+.bnav-item{flex:0 0 calc(100%/5);min-width:64px;}
 .bnav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 calc(7px + var(--sb));cursor:pointer;position:relative;}
 .bnav-icon{font-size:18px;}
 .bnav-label{font-size:8px;color:var(--text2);transition:color .2s;letter-spacing:.04em;}
@@ -447,19 +449,69 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div id="alerts-list"></div>
   </div>
 
+  <!-- SİPARİŞLER -->
+  <div class="page" id="page-orders">
+    <div class="sec-lbl">MÜŞTERİYE SİPARİŞ EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">📦 Sipariş Bilgileri</div>
+      <div class="fg"><label>Müşteri E-posta *</label><input class="fi" id="f-ord-email" type="email" placeholder="musteri@email.com" autocomplete="off"></div>
+      <div class="fg"><label>Ürünler (her satır bir ürün)</label><textarea class="fi notify-msg-input" id="f-ord-items" rows="4" placeholder="Albino Full Red Betta&#10;Japon Balığı x2&#10;Neon Tetra x5"></textarea></div>
+      <div class="fr">
+        <div class="fg"><label>Toplam Tutar (₺)</label><input class="fi" id="f-ord-total" type="number" placeholder="0" inputmode="numeric"></div>
+        <div class="fg"><label>Durum</label>
+          <select class="fi" id="f-ord-status">
+            <option value="pending">Bekliyor</option>
+            <option value="confirmed">Onaylandı</option>
+            <option value="ready">Hazır</option>
+            <option value="done">Tamamlandı</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>Not (isteğe bağlı)</label><input class="fi" id="f-ord-note" type="text" placeholder="Kargo notu, özel istek..." autocomplete="off"></div>
+      <div class="save-status" id="ord-save-status"></div>
+      <button class="btn-p" onclick="saveOrder()">+ Sipariş Ekle</button>
+    </div>
+    <div class="sec-lbl">SON SİPARİŞLER</div>
+    <div id="orders-list"></div>
+  </div>
+
+  <!-- KAMPANYALAR -->
+  <div class="page" id="page-campaigns">
+    <div class="sec-lbl">YENİ KAMPANYA EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">🌟 Kampanya Bilgileri</div>
+      <div class="fg"><label>Başlık *</label><input class="fi" id="f-camp-title" type="text" placeholder="ör. Haziran İndirimi" autocomplete="off"></div>
+      <div class="fg"><label>Açıklama</label><textarea class="fi notify-msg-input" id="f-camp-desc" rows="2" placeholder="Kampanya detayı..."></textarea></div>
+      <div class="fr">
+        <div class="fg"><label>Etiket</label><input class="fi" id="f-camp-badge" type="text" placeholder="İndirim" autocomplete="off"></div>
+        <div class="fg"><label>Emoji</label><input class="fi" id="f-camp-emoji" type="text" placeholder="🎉" maxlength="4" style="font-size:22px;text-align:center;width:80px;"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Kupon Kodu (isteğe)</label><input class="fi" id="f-camp-code" type="text" placeholder="HAZIRAN10" style="text-transform:uppercase;" autocomplete="off"></div>
+        <div class="fg"><label>Son Geçerlilik</label><input class="fi" id="f-camp-expires" type="date"></div>
+      </div>
+      <div class="save-status" id="camp-save-status"></div>
+      <button class="btn-p" onclick="saveCampaign()">+ Kampanya Ekle</button>
+    </div>
+    <div class="sec-lbl">AKTİF KAMPANYALAR</div>
+    <div id="campaigns-list"></div>
+  </div>
+
   <!-- ABONELER -->
   <div class="page" id="page-subs">
-    <div class="notify-card">
+    <div class="sec-lbl">KAYITLI ÜYELER</div>
+    <div id="members-list"><div style="padding:12px;color:var(--text2);font-size:13px;">Yükleniyor...</div></div>
+    <div class="notify-card" style="margin-top:16px;">
       <div class="notify-card-title">📢 Toplu WhatsApp Bildirimi</div>
       <textarea class="notify-msg-input" id="notify-msg" rows="3">Merhaba! Enes Akvaryum'da yeni balıklar geldi! Stok bitmeden göz atın: https://enesakvaryum.com.tr</textarea>
       <button class="notify-btn" onclick="doNotify()">📋 Numaraları & Mesajı Kopyala</button>
     </div>
-    <div class="sec-lbl" id="subs-lbl">ABONELER</div>
+    <div class="sec-lbl" id="subs-lbl">WHATSAPP ABONELERİ</div>
     <div id="subs-list"></div>
   </div>
 
   <!-- Bottom Nav -->
-  <div class="bnav" style="grid-template-columns:repeat(6,1fr);">
+  <div class="bnav">
     <div class="bnav-item active" data-tab="dash" onclick="goTab('dash')">
       <div class="bnav-icon">🏠</div>
       <div class="bnav-label">Panel</div>
@@ -475,6 +527,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div class="bnav-item" data-tab="aq" onclick="goTab('aq')">
       <div class="bnav-icon">🪸</div>
       <div class="bnav-label">Akvaryum</div>
+    </div>
+    <div class="bnav-item" data-tab="orders" onclick="goTab('orders')">
+      <div class="bnav-icon">📦</div>
+      <div class="bnav-label">Siparişler</div>
+    </div>
+    <div class="bnav-item" data-tab="campaigns" onclick="goTab('campaigns')">
+      <div class="bnav-icon">🌟</div>
+      <div class="bnav-label">Kampanya</div>
     </div>
     <div class="bnav-item" data-tab="alerts" onclick="goTab('alerts')" style="position:relative;">
       <div class="bnav-icon">🔔</div>
@@ -544,6 +604,9 @@ function goTab(tab) {
   document.getElementById('page-' + tab).classList.add('active');
   document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
   document.getElementById('page-' + tab).scrollTop = 0;
+  if (tab === 'campaigns') loadCampaigns();
+  if (tab === 'orders') loadRecentOrders();
+  if (tab === 'subs') loadMembers();
 }
 
 /* ══ DATA ══ */
@@ -1066,6 +1129,152 @@ async function clearAlert(i) {
   const ok = await saveAll();
   if (ok) { toast('Bildirim temizlendi ✓', 'ok'); renderAlertList(); updateDash(); }
   else stockAlerts.splice(i, 0, stockAlerts[i]);
+}
+
+/* ══ KAYITLI ÜYELER ══ */
+async function loadMembers() {
+  const el = document.getElementById('members-list');
+  if (!el) return;
+  try {
+    const res   = await fetch(WORKER + '/admin/users', { headers: { 'X-Api-Key': API_KEY_HEADER } });
+    const users = await res.json();
+    if (!users.length) { el.innerHTML = '<div style="padding:12px;color:var(--text2);font-size:13px;">Henüz kayıtlı üye yok.</div>'; return; }
+    el.innerHTML = `<div style="padding:8px 0;color:var(--text2);font-size:11px;margin-bottom:4px;">${users.length} üye</div>` +
+      users.map(u => {
+        const dt = u.createdAt ? new Date(u.createdAt).toLocaleDateString('tr-TR') : '—';
+        const wa = u.phone ? `<a class="wa-alert-btn" href="https://wa.me/${u.phone.replace(/[^0-9]/g,'').replace(/^0/,'90')}" target="_blank">📲 WA</a>` : '';
+        return `<div class="add-card" style="margin-bottom:8px;padding:12px 14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <div style="font-weight:600;color:var(--text1);font-size:13px;">${u.name}</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:2px;">${u.email}</div>
+              ${u.phone ? `<div style="font-size:11px;color:var(--text2);">${u.phone}</div>` : ''}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+              <div style="font-size:10px;color:var(--text2);">${dt}</div>
+              ${wa}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+  } catch { el.innerHTML = '<div style="padding:12px;color:var(--red);font-size:13px;">Yüklenemedi.</div>'; }
+}
+
+/* ══ SİPARİŞLER ══ */
+const API_KEY_HEADER = 'Enesakvaryum2024';
+
+async function saveOrder() {
+  const email  = document.getElementById('f-ord-email').value.trim();
+  const raw    = document.getElementById('f-ord-items').value.trim();
+  const total  = document.getElementById('f-ord-total').value.trim();
+  const status = document.getElementById('f-ord-status').value;
+  const note   = document.getElementById('f-ord-note').value.trim();
+  const st     = document.getElementById('ord-save-status');
+  if (!email || !raw) { st.textContent = 'E-posta ve ürünler zorunludur.'; st.style.color = 'var(--red)'; return; }
+  const items = raw.split('\n').filter(Boolean).map(line => {
+    const m = line.match(/^(.*?)(?:\s*[x×]\s*(\d+))?\s*(?:[-—]\s*(\d+))?$/i);
+    return { name: (m?.[1] || line).trim(), qty: parseInt(m?.[2] || 1), price: m?.[3] ? parseInt(m[3]) : undefined };
+  });
+  const order = { items, status, note: note || undefined, total: total ? parseInt(total) : undefined };
+  st.textContent = 'Kaydediliyor...'; st.style.color = 'var(--teal)';
+  try {
+    const res = await fetch(WORKER + '/admin/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Api-Key': API_KEY_HEADER },
+      body: JSON.stringify({ email, order }),
+    });
+    const data = await res.json();
+    if (!res.ok) { st.textContent = data.error || 'Hata'; st.style.color = 'var(--red)'; return; }
+    st.textContent = 'Eklendi ✓'; st.style.color = 'var(--teal)';
+    document.getElementById('f-ord-email').value = '';
+    document.getElementById('f-ord-items').value = '';
+    document.getElementById('f-ord-total').value = '';
+    document.getElementById('f-ord-note').value = '';
+    toast('Sipariş eklendi ✓', 'ok');
+    loadRecentOrders();
+  } catch { st.textContent = 'Bağlantı hatası'; st.style.color = 'var(--red)'; }
+}
+
+async function loadRecentOrders() {
+  // Son siparişleri göstermek için admin'in kendi siparişlerine bakabiliriz
+  // Şimdilik boş placeholder
+  const el = document.getElementById('orders-list');
+  if (el && !el.children.length) {
+    el.innerHTML = '<div style="padding:16px;color:var(--text2);font-size:13px;">Sipariş ekledikten sonra müşteri kendi hesabında görür.</div>';
+  }
+}
+
+/* ══ KAMPANYALAR ══ */
+let campaignList = [];
+
+async function loadCampaigns() {
+  try {
+    const res  = await fetch(WORKER + '/admin/campaigns', { headers: { 'X-Api-Key': API_KEY_HEADER } });
+    campaignList = await res.json();
+    renderCampaigns();
+  } catch {}
+}
+
+function renderCampaigns() {
+  const el = document.getElementById('campaigns-list');
+  if (!el) return;
+  if (!campaignList.length) { el.innerHTML = '<div style="padding:16px;color:var(--text2);font-size:13px;">Henüz kampanya yok.</div>'; return; }
+  el.innerHTML = campaignList.map((c, i) => `
+    <div class="add-card" style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div>
+          <div style="font-weight:700;color:var(--text1);font-size:14px;">${c.emoji || '🎉'} ${c.title}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:3px;">${c.description || ''}</div>
+          ${c.code ? `<div style="font-size:11px;color:var(--teal);margin-top:4px;">Kod: ${c.code}</div>` : ''}
+          ${c.expiresAt ? `<div style="font-size:11px;color:var(--text2);margin-top:2px;">Son: ${new Date(c.expiresAt).toLocaleDateString('tr-TR')}</div>` : ''}
+        </div>
+        <button class="clear-btn" onclick="deleteCampaign(${i})">✕ Sil</button>
+      </div>
+    </div>`).join('');
+}
+
+async function saveCampaign() {
+  const title   = document.getElementById('f-camp-title').value.trim();
+  const desc    = document.getElementById('f-camp-desc').value.trim();
+  const badge   = document.getElementById('f-camp-badge').value.trim();
+  const emoji   = document.getElementById('f-camp-emoji').value.trim();
+  const code    = document.getElementById('f-camp-code').value.trim().toUpperCase();
+  const expires = document.getElementById('f-camp-expires').value;
+  const st      = document.getElementById('camp-save-status');
+  if (!title) { st.textContent = 'Başlık zorunludur.'; st.style.color = 'var(--red)'; return; }
+  const camp = { id: Date.now().toString(), title, description: desc || undefined, badge: badge || 'Kampanya', emoji: emoji || '🎉', code: code || undefined, expiresAt: expires ? new Date(expires).getTime() : undefined, createdAt: Date.now() };
+  campaignList.unshift(camp);
+  st.textContent = 'Kaydediliyor...'; st.style.color = 'var(--teal)';
+  try {
+    const res = await fetch(WORKER + '/admin/campaigns', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Api-Key': API_KEY_HEADER },
+      body: JSON.stringify(campaignList),
+    });
+    if (!res.ok) { campaignList.shift(); st.textContent = 'Hata'; st.style.color = 'var(--red)'; return; }
+    st.textContent = 'Eklendi ✓'; st.style.color = 'var(--teal)';
+    document.getElementById('f-camp-title').value = '';
+    document.getElementById('f-camp-desc').value = '';
+    document.getElementById('f-camp-badge').value = '';
+    document.getElementById('f-camp-emoji').value = '';
+    document.getElementById('f-camp-code').value = '';
+    document.getElementById('f-camp-expires').value = '';
+    renderCampaigns();
+    toast('Kampanya eklendi ✓', 'ok');
+  } catch { campaignList.shift(); st.textContent = 'Bağlantı hatası'; st.style.color = 'var(--red)'; }
+}
+
+async function deleteCampaign(i) {
+  campaignList.splice(i, 1);
+  try {
+    await fetch(WORKER + '/admin/campaigns', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Api-Key': API_KEY_HEADER },
+      body: JSON.stringify(campaignList),
+    });
+    renderCampaigns();
+    toast('Kampanya silindi', 'ok');
+  } catch { toast('Hata', 'err'); }
 }
 
 function doNotify() {

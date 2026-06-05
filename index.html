@@ -287,10 +287,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
         <div class="dc-sub">ürün</div>
       </div>
       <div class="dc c-gold" onclick="goTab('subs')">
-        <div class="dc-ico">📧</div>
-        <div class="dc-lbl">Abone</div>
-        <div class="dc-val gold" id="d-subs">—</div>
-        <div class="dc-sub">kişi</div>
+        <div class="dc-ico">👥</div>
+        <div class="dc-lbl">Üye</div>
+        <div class="dc-val gold" id="d-members">—</div>
+        <div class="dc-sub" id="d-subs-sub">kayıtlı</div>
       </div>
       <div class="dc c-red" onclick="goTab('reviews')">
         <div class="dc-ico">💬</div>
@@ -588,6 +588,7 @@ function showApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   loadData();
+  fetchMemberCount();
 }
 
 function doLogout() {
@@ -672,6 +673,7 @@ function updateDash() {
   document.getElementById('d-plant').textContent = plantList.length;
   document.getElementById('d-aq').textContent = aqList.length;
   document.getElementById('d-subs').textContent = subList.length;
+  if(window._memberCount!==undefined) document.getElementById('d-members').textContent = window._memberCount;
   document.getElementById('d-rv').textContent = reviewList.length;
   document.getElementById('d-alerts').textContent = stockAlerts.length;
   const badge = document.getElementById('alert-badge');
@@ -1131,6 +1133,16 @@ async function clearAlert(i) {
   else stockAlerts.splice(i, 0, stockAlerts[i]);
 }
 
+async function fetchMemberCount() {
+  try {
+    const res   = await fetch(WORKER + '/admin/users', { headers: { 'X-Api-Key': API_KEY_HEADER } });
+    const users = await res.json();
+    window._memberCount = users.length;
+    const dm = document.getElementById('d-members');
+    if (dm) dm.textContent = users.length;
+  } catch {}
+}
+
 /* ══ KAYITLI ÜYELER ══ */
 async function loadMembers() {
   const el = document.getElementById('members-list');
@@ -1138,6 +1150,9 @@ async function loadMembers() {
   try {
     const res   = await fetch(WORKER + '/admin/users', { headers: { 'X-Api-Key': API_KEY_HEADER } });
     const users = await res.json();
+    window._memberCount = users.length;
+    const dm = document.getElementById('d-members');
+    if (dm) dm.textContent = users.length;
     if (!users.length) { el.innerHTML = '<div style="padding:12px;color:var(--text2);font-size:13px;">Henüz kayıtlı üye yok.</div>'; return; }
     el.innerHTML = `<div style="padding:8px 0;color:var(--text2);font-size:11px;margin-bottom:4px;">${users.length} üye</div>` +
       users.map(u => {

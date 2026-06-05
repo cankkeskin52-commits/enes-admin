@@ -510,6 +510,110 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div id="subs-list"></div>
   </div>
 
+  <!-- Bitki Ürünleri -->
+  <div class="page" id="page-pproducts">
+    <div class="sec-lbl">YENİ BİTKİ ÜRÜNÜ EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">🌱 Bitki Ürünleri</div>
+      <img id="pp-img-preview" class="img-preview">
+      <div class="photo-row">
+        <label class="photo-btn" for="pp-photo">📷 Fotoğraf Seç</label>
+        <input type="file" id="pp-photo" accept="image/*" style="display:none" onchange="handlePPPhoto(this)">
+        <button class="cancel-img-btn" id="pp-cancel-img" onclick="cancelPPImg()">✕ İptal</button>
+      </div>
+      <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-ppname" type="text" placeholder="ör. Seachem Flourish" autocomplete="off"></div>
+      <div class="fg"><label>Alt Kategori *</label>
+        <select class="fi" id="f-ppsubcat">
+          <option value="yapay">Yapay Bitkiler</option>
+          <option value="gübre">Gübre</option>
+          <option value="co2">CO2 Sistemi</option>
+          <option value="bakım_seti">Bakım Seti</option>
+          <option value="substrat">Substrat</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Fiyat (₺)</label><input class="fi" id="f-ppprice" type="number" placeholder="0" inputmode="numeric"></div>
+        <div class="fg"><label>Stok</label><input class="fi" id="f-ppstock" type="number" placeholder="—" inputmode="numeric"></div>
+      </div>
+      <div class="fg"><label>Not</label><input class="fi" id="f-ppnote" type="text" placeholder="Kısa açıklama" autocomplete="off"></div>
+      <div class="save-status" id="pp-save-status"></div>
+      <button class="btn-p" id="pp-add-btn" onclick="savePPItem()">+ Ekle</button>
+      <button class="btn-danger" id="pp-del-btn" onclick="deletePPItem()" style="display:none">Sil</button>
+    </div>
+    <div class="sec-lbl">MEVCUT BİTKİ ÜRÜNLERİ</div>
+    <div class="item-list" id="pp-list"></div>
+  </div>
+
+  <!-- Taş & Dekor Ürünleri -->
+  <div class="page" id="page-sproducts">
+    <div class="sec-lbl">YENİ TAŞ & DEKOR EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">🪨 Taş & Dekor Ürünleri</div>
+      <img id="sp-img-preview" class="img-preview">
+      <div class="photo-row">
+        <label class="photo-btn" for="sp-photo">📷 Fotoğraf Seç</label>
+        <input type="file" id="sp-photo" accept="image/*" style="display:none" onchange="handleSPPhoto(this)">
+        <button class="cancel-img-btn" id="sp-cancel-img" onclick="cancelSPImg()">✕ İptal</button>
+      </div>
+      <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-spname" type="text" placeholder="ör. Lava Taşı" autocomplete="off"></div>
+      <div class="fg"><label>Alt Kategori *</label>
+        <select class="fi" id="f-spsubcat">
+          <option value="doğal_taş">Doğal Taşlar</option>
+          <option value="çakıl_kum">Çakıl & Kum</option>
+          <option value="kök_ağaç">Kökler & Ağaç</option>
+          <option value="dekor">Dekor Objeleri</option>
+          <option value="arka_plan">Arka Plan</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Fiyat (₺)</label><input class="fi" id="f-spprice" type="number" placeholder="0" inputmode="numeric"></div>
+        <div class="fg"><label>Stok</label><input class="fi" id="f-spstock" type="number" placeholder="—" inputmode="numeric"></div>
+      </div>
+      <div class="fg"><label>Not</label><input class="fi" id="f-spnote" type="text" placeholder="Kısa açıklama" autocomplete="off"></div>
+      <div class="save-status" id="sp-save-status"></div>
+      <button class="btn-p" id="sp-add-btn" onclick="saveSPItem()">+ Ekle</button>
+      <button class="btn-danger" id="sp-del-btn" onclick="deleteSPItem()" style="display:none">Sil</button>
+    </div>
+    <div class="sec-lbl">MEVCUT TAŞ & DEKOR ÜRÜNLERİ</div>
+    <div class="item-list" id="sp-list"></div>
+  </div>
+
+  <!-- Ekipman -->
+  <div class="page" id="page-equipment">
+    <div class="sec-lbl">YENİ EKİPMAN EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">⚙️ Ekipman</div>
+      <img id="eq-img-preview" class="img-preview">
+      <div class="photo-row">
+        <label class="photo-btn" for="eq-photo">📷 Fotoğraf Seç</label>
+        <input type="file" id="eq-photo" accept="image/*" style="display:none" onchange="handleEQPhoto(this)">
+        <button class="cancel-img-btn" id="eq-cancel-img" onclick="cancelEQImg()">✕ İptal</button>
+      </div>
+      <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-eqname" type="text" placeholder="ör. Eheim Classic 250" autocomplete="off"></div>
+      <div class="fg"><label>Alt Kategori *</label>
+        <select class="fi" id="f-eqsubcat">
+          <option value="filtre">Filtre</option>
+          <option value="ısıtıcı">Isıtıcı & Termometre</option>
+          <option value="aydınlatma">Aydınlatma</option>
+          <option value="hava_motoru">Hava Motoru</option>
+          <option value="su_arıtma">Su Arıtma</option>
+          <option value="test_kiti">Test Kiti</option>
+          <option value="temizlik">Temizlik Ekipmanı</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Fiyat (₺)</label><input class="fi" id="f-eqprice" type="number" placeholder="0" inputmode="numeric"></div>
+        <div class="fg"><label>Stok</label><input class="fi" id="f-eqstock" type="number" placeholder="—" inputmode="numeric"></div>
+      </div>
+      <div class="fg"><label>Not</label><input class="fi" id="f-eqnote" type="text" placeholder="Kısa açıklama" autocomplete="off"></div>
+      <div class="save-status" id="eq-save-status"></div>
+      <button class="btn-p" id="eq-add-btn" onclick="saveEQItem()">+ Ekle</button>
+      <button class="btn-danger" id="eq-del-btn" onclick="deleteEQItem()" style="display:none">Sil</button>
+    </div>
+    <div class="sec-lbl">MEVCUT EKİPMANLAR</div>
+    <div class="item-list" id="eq-list"></div>
+  </div>
+
   <!-- Bottom Nav -->
   <div class="bnav">
     <div class="bnav-item active" data-tab="dash" onclick="goTab('dash')">
@@ -545,6 +649,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <div class="bnav-icon">👥</div>
       <div class="bnav-label">Aboneler</div>
     </div>
+    <div class="bnav-item" data-tab="pproducts" onclick="goTab('pproducts')">
+      <div class="bnav-icon">🌱</div>
+      <div class="bnav-label">Bitki Ürün</div>
+    </div>
+    <div class="bnav-item" data-tab="sproducts" onclick="goTab('sproducts')">
+      <div class="bnav-icon">🪨</div>
+      <div class="bnav-label">Taş&Dekor</div>
+    </div>
+    <div class="bnav-item" data-tab="equipment" onclick="goTab('equipment')">
+      <div class="bnav-icon">⚙️</div>
+      <div class="bnav-label">Ekipman</div>
+    </div>
   </div>
 </div>
 
@@ -561,10 +677,14 @@ const SESSION_KEY = 'ea_admin_logged';
 
 /* ══ STATE ══ */
 let fishList = [], plantList = [], aqList = [], reviewList = [], subList = [], stockAlerts = [];
+let ppList = [], spList = [], eqList = [];
 let _visits = 0;
 let editFishIdx = -1, editPlantIdx = -1, editAqIdx = -1;
+let editPPIdx = -1, editSPIdx = -1, editEQIdx = -1;
 let fishImgUrl = '', plantImgUrl = '', aqImgUrl = '';
+let ppImgUrl = '', spImgUrl = '', eqImgUrl = '';
 let fishFile = null, plantFile = null, aqFile = null;
+let ppFile = null, spFile = null, eqFile = null;
 let selStars = 3;
 
 /* ══ INIT ══ */
@@ -631,6 +751,9 @@ async function loadData() {
     reviewList = d.reviews || [];
     subList = d.subscribers || [];
     stockAlerts = d.stockAlerts || [];
+    ppList = d.plant_products || [];
+    spList = d.stone_products || [];
+    eqList = d.equipment || [];
     _visits = d.visits || 0;
     localStorage.setItem('ea_admin_cache', JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList }));
     setSyncDot('ok');
@@ -654,7 +777,7 @@ async function saveAll(statusEl) {
     const r = await fetch(WORKER, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'Enesakvaryum2024' },
-      body: JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList, stockAlerts, visits: _visits })
+      body: JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList, stockAlerts, visits: _visits, plant_products: ppList, stone_products: spList, equipment: eqList })
     });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     localStorage.setItem('ea_admin_cache', JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList }));
@@ -688,6 +811,9 @@ function renderAll() {
   renderReviewList();
   renderSubList();
   renderAlertList();
+  renderPPList();
+  renderSPList();
+  renderEQList();
 }
 
 /* ══ CLOUDINARY UPLOAD ══ */
@@ -1306,6 +1432,243 @@ function doNotify() {
   }).catch(() => {
     toast('Panoya kopyalanamadı', 'err');
   });
+}
+
+/* ══ BİTKİ ÜRÜNLERİ (PP) ══ */
+function handlePPPhoto(inp) {
+  const f = inp.files[0]; if (!f) return;
+  ppFile = f;
+  const prev = document.getElementById('pp-img-preview');
+  prev.src = URL.createObjectURL(f); prev.style.display = 'block';
+  document.getElementById('pp-cancel-img').style.display = 'inline-flex';
+}
+function cancelPPImg() {
+  ppFile = null; ppImgUrl = '';
+  const prev = document.getElementById('pp-img-preview');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('pp-photo').value = '';
+  document.getElementById('pp-cancel-img').style.display = 'none';
+}
+function resetPPForm() {
+  document.getElementById('f-ppname').value = '';
+  document.getElementById('f-ppsubcat').selectedIndex = 0;
+  document.getElementById('f-ppprice').value = '';
+  document.getElementById('f-ppstock').value = '';
+  document.getElementById('f-ppnote').value = '';
+  cancelPPImg();
+  editPPIdx = -1;
+  document.getElementById('pp-add-btn').textContent = '+ Ekle';
+  document.getElementById('pp-del-btn').style.display = 'none';
+}
+async function savePPItem() {
+  const name = document.getElementById('f-ppname').value.trim();
+  if (!name) { toast('Ürün adı zorunlu', 'err'); return; }
+  const statusEl = 'pp-save-status';
+  document.getElementById(statusEl).textContent = '⏳ Kaydediliyor...';
+  let imgUrl = ppImgUrl;
+  if (ppFile) { imgUrl = await uploadCloudinary(ppFile) || ''; }
+  const item = {
+    name,
+    subcategory: document.getElementById('f-ppsubcat').value,
+    price: Number(document.getElementById('f-ppprice').value) || 0,
+    stock: document.getElementById('f-ppstock').value !== '' ? Number(document.getElementById('f-ppstock').value) : null,
+    note: document.getElementById('f-ppnote').value.trim(),
+    img: imgUrl,
+    outOfStock: false
+  };
+  if (editPPIdx >= 0) { ppList[editPPIdx] = item; } else { ppList.unshift(item); }
+  const ok = await saveAll(statusEl);
+  if (ok) { toast('✓ Kaydedildi', 'ok'); resetPPForm(); renderPPList(); }
+}
+function deletePPItem() {
+  if (editPPIdx < 0) return;
+  ppList.splice(editPPIdx, 1);
+  saveAll().then(() => { toast('Silindi', 'ok'); resetPPForm(); renderPPList(); });
+}
+function renderPPList() {
+  const el = document.getElementById('pp-list'); if (!el) return;
+  if (!ppList.length) { el.innerHTML = '<div style="padding:12px;color:var(--text2);font-size:13px;">Henüz ürün yok.</div>'; return; }
+  el.innerHTML = ppList.map((p, i) => `
+    <div class="item-card" onclick="editPPItem(${i})">
+      ${p.img ? `<img class="item-thumb" src="${p.img}" alt="">` : '<div class="item-thumb-placeholder">🌱</div>'}
+      <div class="item-info">
+        <div class="item-name">${p.name}</div>
+        <div class="item-meta">${p.subcategory || ''} ${p.price ? '· ' + Number(p.price).toLocaleString('tr-TR') + ' ₺' : ''}</div>
+      </div>
+      <div class="item-price" style="flex-shrink:0;font-size:12px;">›</div>
+    </div>`).join('');
+}
+function editPPItem(i) {
+  const p = ppList[i]; editPPIdx = i;
+  document.getElementById('f-ppname').value = p.name || '';
+  const sc = document.getElementById('f-ppsubcat');
+  for (let o of sc.options) if (o.value === p.subcategory) { o.selected = true; break; }
+  document.getElementById('f-ppprice').value = p.price || '';
+  document.getElementById('f-ppstock').value = p.stock != null ? p.stock : '';
+  document.getElementById('f-ppnote').value = p.note || '';
+  if (p.img) { ppImgUrl = p.img; const prev = document.getElementById('pp-img-preview'); prev.src = p.img; prev.style.display = 'block'; document.getElementById('pp-cancel-img').style.display = 'inline-flex'; }
+  document.getElementById('pp-add-btn').textContent = '✓ Güncelle';
+  document.getElementById('pp-del-btn').style.display = 'block';
+  goTab('pproducts');
+  document.getElementById('page-pproducts').scrollTop = 0;
+}
+
+/* ══ TAŞ & DEKOR (SP) ══ */
+function handleSPPhoto(inp) {
+  const f = inp.files[0]; if (!f) return;
+  spFile = f;
+  const prev = document.getElementById('sp-img-preview');
+  prev.src = URL.createObjectURL(f); prev.style.display = 'block';
+  document.getElementById('sp-cancel-img').style.display = 'inline-flex';
+}
+function cancelSPImg() {
+  spFile = null; spImgUrl = '';
+  const prev = document.getElementById('sp-img-preview');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('sp-photo').value = '';
+  document.getElementById('sp-cancel-img').style.display = 'none';
+}
+function resetSPForm() {
+  document.getElementById('f-spname').value = '';
+  document.getElementById('f-spsubcat').selectedIndex = 0;
+  document.getElementById('f-spprice').value = '';
+  document.getElementById('f-spstock').value = '';
+  document.getElementById('f-spnote').value = '';
+  cancelSPImg();
+  editSPIdx = -1;
+  document.getElementById('sp-add-btn').textContent = '+ Ekle';
+  document.getElementById('sp-del-btn').style.display = 'none';
+}
+async function saveSPItem() {
+  const name = document.getElementById('f-spname').value.trim();
+  if (!name) { toast('Ürün adı zorunlu', 'err'); return; }
+  const statusEl = 'sp-save-status';
+  document.getElementById(statusEl).textContent = '⏳ Kaydediliyor...';
+  let imgUrl = spImgUrl;
+  if (spFile) { imgUrl = await uploadCloudinary(spFile) || ''; }
+  const item = {
+    name,
+    subcategory: document.getElementById('f-spsubcat').value,
+    price: Number(document.getElementById('f-spprice').value) || 0,
+    stock: document.getElementById('f-spstock').value !== '' ? Number(document.getElementById('f-spstock').value) : null,
+    note: document.getElementById('f-spnote').value.trim(),
+    img: imgUrl,
+    outOfStock: false
+  };
+  if (editSPIdx >= 0) { spList[editSPIdx] = item; } else { spList.unshift(item); }
+  const ok = await saveAll(statusEl);
+  if (ok) { toast('✓ Kaydedildi', 'ok'); resetSPForm(); renderSPList(); }
+}
+function deleteSPItem() {
+  if (editSPIdx < 0) return;
+  spList.splice(editSPIdx, 1);
+  saveAll().then(() => { toast('Silindi', 'ok'); resetSPForm(); renderSPList(); });
+}
+function renderSPList() {
+  const el = document.getElementById('sp-list'); if (!el) return;
+  if (!spList.length) { el.innerHTML = '<div style="padding:12px;color:var(--text2);font-size:13px;">Henüz ürün yok.</div>'; return; }
+  el.innerHTML = spList.map((p, i) => `
+    <div class="item-card" onclick="editSPItem(${i})">
+      ${p.img ? `<img class="item-thumb" src="${p.img}" alt="">` : '<div class="item-thumb-placeholder">🪨</div>'}
+      <div class="item-info">
+        <div class="item-name">${p.name}</div>
+        <div class="item-meta">${p.subcategory || ''} ${p.price ? '· ' + Number(p.price).toLocaleString('tr-TR') + ' ₺' : ''}</div>
+      </div>
+      <div class="item-price" style="flex-shrink:0;font-size:12px;">›</div>
+    </div>`).join('');
+}
+function editSPItem(i) {
+  const p = spList[i]; editSPIdx = i;
+  document.getElementById('f-spname').value = p.name || '';
+  const sc = document.getElementById('f-spsubcat');
+  for (let o of sc.options) if (o.value === p.subcategory) { o.selected = true; break; }
+  document.getElementById('f-spprice').value = p.price || '';
+  document.getElementById('f-spstock').value = p.stock != null ? p.stock : '';
+  document.getElementById('f-spnote').value = p.note || '';
+  if (p.img) { spImgUrl = p.img; const prev = document.getElementById('sp-img-preview'); prev.src = p.img; prev.style.display = 'block'; document.getElementById('sp-cancel-img').style.display = 'inline-flex'; }
+  document.getElementById('sp-add-btn').textContent = '✓ Güncelle';
+  document.getElementById('sp-del-btn').style.display = 'block';
+  goTab('sproducts');
+  document.getElementById('page-sproducts').scrollTop = 0;
+}
+
+/* ══ EKİPMAN (EQ) ══ */
+function handleEQPhoto(inp) {
+  const f = inp.files[0]; if (!f) return;
+  eqFile = f;
+  const prev = document.getElementById('eq-img-preview');
+  prev.src = URL.createObjectURL(f); prev.style.display = 'block';
+  document.getElementById('eq-cancel-img').style.display = 'inline-flex';
+}
+function cancelEQImg() {
+  eqFile = null; eqImgUrl = '';
+  const prev = document.getElementById('eq-img-preview');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('eq-photo').value = '';
+  document.getElementById('eq-cancel-img').style.display = 'none';
+}
+function resetEQForm() {
+  document.getElementById('f-eqname').value = '';
+  document.getElementById('f-eqsubcat').selectedIndex = 0;
+  document.getElementById('f-eqprice').value = '';
+  document.getElementById('f-eqstock').value = '';
+  document.getElementById('f-eqnote').value = '';
+  cancelEQImg();
+  editEQIdx = -1;
+  document.getElementById('eq-add-btn').textContent = '+ Ekle';
+  document.getElementById('eq-del-btn').style.display = 'none';
+}
+async function saveEQItem() {
+  const name = document.getElementById('f-eqname').value.trim();
+  if (!name) { toast('Ürün adı zorunlu', 'err'); return; }
+  const statusEl = 'eq-save-status';
+  document.getElementById(statusEl).textContent = '⏳ Kaydediliyor...';
+  let imgUrl = eqImgUrl;
+  if (eqFile) { imgUrl = await uploadCloudinary(eqFile) || ''; }
+  const item = {
+    name,
+    subcategory: document.getElementById('f-eqsubcat').value,
+    price: Number(document.getElementById('f-eqprice').value) || 0,
+    stock: document.getElementById('f-eqstock').value !== '' ? Number(document.getElementById('f-eqstock').value) : null,
+    note: document.getElementById('f-eqnote').value.trim(),
+    img: imgUrl,
+    outOfStock: false
+  };
+  if (editEQIdx >= 0) { eqList[editEQIdx] = item; } else { eqList.unshift(item); }
+  const ok = await saveAll(statusEl);
+  if (ok) { toast('✓ Kaydedildi', 'ok'); resetEQForm(); renderEQList(); }
+}
+function deleteEQItem() {
+  if (editEQIdx < 0) return;
+  eqList.splice(editEQIdx, 1);
+  saveAll().then(() => { toast('Silindi', 'ok'); resetEQForm(); renderEQList(); });
+}
+function renderEQList() {
+  const el = document.getElementById('eq-list'); if (!el) return;
+  if (!eqList.length) { el.innerHTML = '<div style="padding:12px;color:var(--text2);font-size:13px;">Henüz ürün yok.</div>'; return; }
+  el.innerHTML = eqList.map((p, i) => `
+    <div class="item-card" onclick="editEQItem(${i})">
+      ${p.img ? `<img class="item-thumb" src="${p.img}" alt="">` : '<div class="item-thumb-placeholder">⚙️</div>'}
+      <div class="item-info">
+        <div class="item-name">${p.name}</div>
+        <div class="item-meta">${p.subcategory || ''} ${p.price ? '· ' + Number(p.price).toLocaleString('tr-TR') + ' ₺' : ''}</div>
+      </div>
+      <div class="item-price" style="flex-shrink:0;font-size:12px;">›</div>
+    </div>`).join('');
+}
+function editEQItem(i) {
+  const p = eqList[i]; editEQIdx = i;
+  document.getElementById('f-eqname').value = p.name || '';
+  const sc = document.getElementById('f-eqsubcat');
+  for (let o of sc.options) if (o.value === p.subcategory) { o.selected = true; break; }
+  document.getElementById('f-eqprice').value = p.price || '';
+  document.getElementById('f-eqstock').value = p.stock != null ? p.stock : '';
+  document.getElementById('f-eqnote').value = p.note || '';
+  if (p.img) { eqImgUrl = p.img; const prev = document.getElementById('eq-img-preview'); prev.src = p.img; prev.style.display = 'block'; document.getElementById('eq-cancel-img').style.display = 'inline-flex'; }
+  document.getElementById('eq-add-btn').textContent = '✓ Güncelle';
+  document.getElementById('eq-del-btn').style.display = 'block';
+  goTab('equipment');
+  document.getElementById('page-equipment').scrollTop = 0;
 }
 </script>
 </body>

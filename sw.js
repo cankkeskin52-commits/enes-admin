@@ -1,4 +1,4 @@
-const CACHE = 'ea-admin-v1';
+const CACHE = 'ea-admin-v4';
 const CORE = ['/enes-admin/', '/enes-admin/index.html'];
 
 self.addEventListener('install', e => {

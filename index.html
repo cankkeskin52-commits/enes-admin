@@ -31,7 +31,13 @@ if('serviceWorker' in navigator){
         // Periyodik kontrol — 5 dk'da bir güncelleme var mı bak
         setInterval(()=>r.update(), 5*60*1000);
       });
-    navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
+    navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
+    // SW güncellenince otomatik yenile
+    navigator.serviceWorker.addEventListener('message', e => {
+      if (e.data && e.data.type === 'SW_UPDATED') {
+        window.location.reload();
+      }
+    });
   });
 }
 </script>

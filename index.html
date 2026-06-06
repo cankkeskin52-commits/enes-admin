@@ -911,7 +911,7 @@ async function saveFishItem() {
     img
   };
   if (editFishIdx >= 0) { fishList[editFishIdx] = { ...fishList[editFishIdx], ...item }; }
-  else fishList.push(item);
+  else { item.createdAt = Date.now(); fishList.push(item); }
   const ok = await saveAll('fish-save-status');
   if (ok) { toast(editFishIdx >= 0 ? 'Balık güncellendi ✓' : 'Balık eklendi ✓', 'ok'); resetFishForm(); renderFishList(); }
   else { if (editFishIdx < 0) fishList.pop(); }

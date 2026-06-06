@@ -614,6 +614,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div class="item-list" id="eq-list"></div>
   </div>
 
+  <!-- INSTAGRAM -->
+  <div class="page" id="page-instagram">
+    <div class="sec-lbl">YENİ POST EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">📸 Instagram Post</div>
+      <img id="ig-img-preview" class="img-preview">
+      <div class="photo-row">
+        <label class="photo-btn" for="ig-photo">📷 Fotoğraf Seç</label>
+        <input type="file" id="ig-photo" accept="image/*" style="display:none" onchange="handleIgPhoto(this)">
+        <button class="cancel-img-btn" id="ig-cancel-img" onclick="cancelIgImg()">✕ İptal</button>
+      </div>
+      <div class="fg"><label>Instagram Post URL (isteğe bağlı)</label><input class="fi" id="f-igurl" type="url" placeholder="https://www.instagram.com/p/..." autocomplete="off"></div>
+      <div class="fg"><label>Açıklama</label><input class="fi" id="f-igcaption" type="text" placeholder="Discus balığı..." autocomplete="off"></div>
+      <div class="save-status" id="ig-save-status"></div>
+      <button class="btn-p" onclick="saveIgPost()">+ Post Ekle</button>
+    </div>
+    <div class="sec-lbl">MEVCUT POSTLAR (<span id="ig-count">0</span>)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 14px;" id="ig-list"></div>
+  </div>
+
   <!-- Bottom Nav -->
   <div class="bnav">
     <div class="bnav-item active" data-tab="dash" onclick="goTab('dash')">
@@ -660,6 +680,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div class="bnav-item" data-tab="equipment" onclick="goTab('equipment')">
       <div class="bnav-icon">⚙️</div>
       <div class="bnav-label">Ekipman</div>
+    </div>
+    <div class="bnav-item" data-tab="instagram" onclick="goTab('instagram')">
+      <div class="bnav-icon">📸</div>
+      <div class="bnav-label">Instagram</div>
     </div>
   </div>
 </div>
@@ -749,6 +773,7 @@ function goTab(tab) {
   document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
   document.getElementById('page-' + tab).scrollTop = 0;
   if (tab === 'campaigns') loadCampaigns();
+  if (tab === 'instagram') loadIgPosts();
   if (tab === 'orders') loadRecentOrders();
   if (tab === 'subs') loadMembers();
 }
@@ -1454,6 +1479,95 @@ function doNotify() {
   }).catch(() => {
     toast('Panoya kopyalanamadı', 'err');
   });
+}
+
+/* ══ INSTAGRAM ══ */
+let igList = [];
+let igFile = null, igImgUrl = '';
+
+function handleIgPhoto(inp) {
+  const f = inp.files[0]; if (!f) return;
+  igFile = f;
+  const r = new FileReader();
+  r.onload = e => { const p = document.getElementById('ig-img-preview'); p.src = e.target.result; p.style.display = 'block'; document.getElementById('ig-cancel-img').style.display = 'inline-flex'; };
+  r.readAsDataURL(f);
+}
+function cancelIgImg() {
+  igFile = null; igImgUrl = '';
+  const p = document.getElementById('ig-img-preview'); p.src = ''; p.style.display = 'none';
+  document.getElementById('ig-cancel-img').style.display = 'none';
+  document.getElementById('ig-photo').value = '';
+}
+
+async function saveIgPost() {
+  const st = document.getElementById('ig-save-status');
+  let img = igImgUrl;
+  if (igFile) {
+    st.textContent = '📤 Yükleniyor...';
+    img = await uploadCloudinary(igFile);
+    if (!img) { toast('Fotoğraf yüklenemedi', 'err'); return; }
+  }
+  if (!img) { toast('Fotoğraf seçin!', 'err'); return; }
+  const post = {
+    id: Date.now().toString(),
+    img,
+    url: document.getElementById('f-igurl').value.trim() || 'https://www.instagram.com/enesakvaryum_/',
+    caption: document.getElementById('f-igcaption').value.trim(),
+    createdAt: Date.now()
+  };
+  igList.unshift(post);
+  st.textContent = '⏳ Kaydediliyor...';
+  try {
+    const r = await fetch(WORKER + '/admin/instagram', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      body: JSON.stringify(igList)
+    });
+    if (!r.ok) throw new Error();
+    toast('Post eklendi ✓', 'ok');
+    st.textContent = '';
+    document.getElementById('f-igurl').value = '';
+    document.getElementById('f-igcaption').value = '';
+    cancelIgImg();
+    renderIgList();
+  } catch { igList.shift(); st.textContent = '✗ Hata'; toast('Kayıt hatası', 'err'); }
+}
+
+async function deleteIgPost(id) {
+  igList = igList.filter(p => p.id !== id);
+  try {
+    await fetch(WORKER + '/admin/instagram', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      body: JSON.stringify(igList)
+    });
+    toast('Post silindi', 'err');
+    renderIgList();
+  } catch { toast('Hata', 'err'); }
+}
+
+function renderIgList() {
+  const el = document.getElementById('ig-list');
+  const cnt = document.getElementById('ig-count');
+  if (cnt) cnt.textContent = igList.length;
+  if (!el) return;
+  if (!igList.length) { el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text2);font-size:13px;">Henüz post yok</div>'; return; }
+  el.innerHTML = igList.map(p => `
+    <div style="position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--bg3);">
+      ${p.img ? `<img src="${p.img}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;">📸</div>'}
+      <button onclick="deleteIgPost('${p.id}')" style="position:absolute;top:5px;right:5px;background:rgba(224,85,85,.9);border:none;border-radius:6px;color:#fff;font-size:10px;padding:3px 7px;cursor:pointer;">✕</button>
+      ${p.caption ? `<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:9px;padding:4px 6px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${p.caption}</div>` : ''}
+    </div>`).join('');
+}
+
+async function loadIgPosts() {
+  try {
+    const r = await fetch(WORKER + '/admin/instagram', {
+      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` }
+    });
+    igList = await r.json();
+    renderIgList();
+  } catch {}
 }
 
 /* ══ BİTKİ ÜRÜNLERİ (PP) ══ */

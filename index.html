@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="EA Admin">
 <meta name="theme-color" content="#020810">
 <link rel="manifest" href="/enes-admin/manifest.json">
-<link rel="apple-touch-icon" href="/enes-admin/icon.svg">
+<link rel="apple-touch-icon" href="/enes-admin/apple-touch-icon.png">
 <title>Enes Akvaryum · Admin</title>
 <script>
 if('serviceWorker' in navigator){
@@ -236,6 +236,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 </div>
 
 <!-- LOGIN -->
+<!-- PWA Install Banner -->
+<div id="pwa-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,rgba(4,16,32,.98),rgba(7,24,48,.98));border-top:.5px solid rgba(45,224,204,.2);padding:14px 16px calc(14px + env(safe-area-inset-bottom));backdrop-filter:blur(20px);">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <img src="/enes-admin/icon-192.png" style="width:44px;height:44px;border-radius:10px;flex-shrink:0;">
+    <div style="flex:1;">
+      <div style="font-size:13px;font-weight:700;color:var(--teal);">Ana Ekrana Ekle</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:2px;" id="pwa-banner-msg">Uygulama gibi açmak için ekleyin</div>
+    </div>
+    <button id="pwa-install-btn" onclick="installPWA()" style="background:linear-gradient(135deg,rgba(45,224,204,.25),rgba(58,159,212,.15));border:.5px solid var(--teal);border-radius:10px;padding:9px 16px;font-size:12px;font-weight:700;color:var(--teal);cursor:pointer;white-space:nowrap;">Ekle</button>
+    <button onclick="document.getElementById('pwa-banner').style.display='none';localStorage.setItem('pwa_dismissed','1')" style="background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;">✕</button>
+  </div>
+</div>
+
 <div id="login-screen" style="display:none">
   <img src="/enes-admin/logo.svg" style="width:180px;height:180px;margin-bottom:-8px;" alt="Enes Akvaryum">
   <div class="login-sub" style="margin-top:4px;">Yönetim Paneli</div>
@@ -711,6 +724,50 @@ let ppFile = null, spFile = null, eqFile = null;
 let selStars = 3;
 
 /* ══ INIT ══ */
+/* ══ PWA INSTALL ══ */
+let _deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  if (!localStorage.getItem('pwa_dismissed') && !window.matchMedia('(display-mode: standalone)').matches) {
+    document.getElementById('pwa-banner').style.display = 'block';
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('pwa-banner').style.display = 'none';
+  _deferredPrompt = null;
+  toast('✓ Uygulama yüklendi!', 'ok');
+});
+
+function installPWA() {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (isIOS) {
+    // iOS'ta native prompt yok — talimat göster
+    document.getElementById('pwa-install-btn').style.display = 'none';
+    document.getElementById('pwa-banner-msg').innerHTML =
+      '📲 Safari\'de <b style="color:var(--teal)">Paylaş</b> → <b style="color:var(--teal)">Ana Ekrana Ekle</b>';
+    return;
+  }
+  if (_deferredPrompt) {
+    _deferredPrompt.prompt();
+    _deferredPrompt.userChoice.then(r => {
+      if (r.outcome === 'accepted') toast('✓ Uygulama yükleniyor!', 'ok');
+      _deferredPrompt = null;
+      document.getElementById('pwa-banner').style.display = 'none';
+    });
+  }
+}
+
+// Zaten standalone modda açıksa banner gösterme
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const b = document.getElementById('pwa-banner');
+    if (b) b.style.display = 'none';
+  });
+}
+
 window.addEventListener('load', () => {
   showApp();
 });

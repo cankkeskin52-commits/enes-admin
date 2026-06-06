@@ -1619,11 +1619,12 @@ async function saveIgPost() {
     img = await uploadCloudinary(igFile);
     if (!img) { toast('Fotoğraf yüklenemedi', 'err'); return; }
   }
-  if (!img) { toast('Fotoğraf seçin!', 'err'); return; }
+  const url = document.getElementById('f-igurl').value.trim();
+  if (!img && !url) { toast('En az link veya fotoğraf girin!', 'err'); return; }
   const post = {
     id: Date.now().toString(),
-    img,
-    url: document.getElementById('f-igurl').value.trim() || 'https://www.instagram.com/enesakvaryum_/',
+    img: img || '',
+    url: url || 'https://www.instagram.com/enesakvaryum_/',
     caption: document.getElementById('f-igcaption').value.trim(),
     createdAt: Date.now()
   };
@@ -1640,6 +1641,7 @@ async function saveIgPost() {
     st.textContent = '';
     document.getElementById('f-igurl').value = '';
     document.getElementById('f-igcaption').value = '';
+    igImgUrl = ''; igFile = null;
     cancelIgImg();
     renderIgList();
   } catch { igList.shift(); st.textContent = '✗ Hata'; toast('Kayıt hatası', 'err'); }

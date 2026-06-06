@@ -25,8 +25,8 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
 
-  // HTML: her zaman network'ten, asla cache'leme
-  if (url.pathname.endsWith('.html') || url.pathname.endsWith('/')) {
+  // HTML ve version.json: her zaman network'ten, asla cache'leme
+  if (url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname.endsWith('version.json')) {
     e.respondWith(fetch(e.request, { cache: 'no-cache' }).catch(() => caches.match(e.request)));
     return;
   }

@@ -11,6 +11,21 @@
 <link rel="apple-touch-icon" href="/enes-admin/apple-touch-icon.png">
 <title>Enes Akvaryum · Admin</title>
 <script>
+// ── Versiyon kontrolü — PWA güncel mi? ──
+(function(){
+  fetch('/enes-admin/version.json?t='+Date.now(), {cache:'no-store'})
+    .then(r=>r.json())
+    .then(d=>{
+      const stored = localStorage.getItem('ea_app_ver');
+      if(stored && stored !== d.v) {
+        localStorage.setItem('ea_app_ver', d.v);
+        window.location.reload(true);
+      } else {
+        localStorage.setItem('ea_app_ver', d.v);
+      }
+    }).catch(()=>{});
+})();
+
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
     navigator.serviceWorker.register('/enes-admin/sw.js',{scope:'/enes-admin/'})

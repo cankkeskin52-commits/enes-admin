@@ -11,47 +11,54 @@
 <link rel="apple-touch-icon" href="/enes-admin/apple-touch-icon.png">
 <title>Enes Akvaryum · Admin</title>
 <script>
-// ── Versiyon kontrolü — PWA güncel mi? ──
+// ── Versiyon kontrolü — iOS PWA için ──
 (function(){
+  // Her açılışta network'ten version.json çek (cache bypass)
   fetch('/enes-admin/version.json?t='+Date.now(), {cache:'no-store'})
     .then(r=>r.json())
     .then(d=>{
       const stored = localStorage.getItem('ea_app_ver');
-      if(stored && stored !== d.v) {
-        localStorage.setItem('ea_app_ver', d.v);
-        window.location.reload(true);
+      if(stored && stored !== String(d.v)) {
+        localStorage.setItem('ea_app_ver', String(d.v));
+        // Hard reload — iOS cache'ini temizler
+        window.location.href = window.location.href.split('?')[0] + '?v=' + d.v;
       } else {
-        localStorage.setItem('ea_app_ver', d.v);
+        localStorage.setItem('ea_app_ver', String(d.v));
       }
     }).catch(()=>{});
 })();
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/enes-admin/sw.js',{scope:'/enes-admin/'})
-      .then(r=>{
-        // Güncelleme varsa hemen uygula
-        r.addEventListener('updatefound',()=>{
-          const w=r.installing;
-          w.addEventListener('statechange',()=>{
-            if(w.state==='installed'&&navigator.serviceWorker.controller){
-              window.location.reload();
-            }
-          });
+    // updateViaCache:'none' → iOS sw.js'i her zaman network'ten alır
+    navigator.serviceWorker.register('/enes-admin/sw.js', {
+      scope: '/enes-admin/',
+      updateViaCache: 'none'
+    }).then(r=>{
+      // Hemen güncelleme kontrolü
+      r.update();
+      // Yeni SW bulunursa
+      r.addEventListener('updatefound',()=>{
+        const w = r.installing;
+        w.addEventListener('statechange',()=>{
+          if(w.state==='installed' && navigator.serviceWorker.controller){
+            w.postMessage({type:'SKIP_WAITING'});
+          }
+          if(w.state==='activated'){
+            window.location.reload();
+          }
         });
-        // Zaten güncelleme bekleyeni varsa hemen aktifleştir
-        if(r.waiting){
-          r.waiting.postMessage({type:'SKIP_WAITING'});
-        }
-        // Periyodik kontrol — 5 dk'da bir güncelleme var mı bak
-        setInterval(()=>r.update(), 5*60*1000);
       });
-    navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
-    // SW güncellenince otomatik yenile
-    navigator.serviceWorker.addEventListener('message', e => {
-      if (e.data && e.data.type === 'SW_UPDATED') {
-        window.location.reload();
+      // Bekleyen varsa hemen aktifleştir
+      if(r.waiting){
+        r.waiting.postMessage({type:'SKIP_WAITING'});
       }
+      // 5 dk'da bir güncelleme kontrolü
+      setInterval(()=>r.update(), 5*60*1000);
+    });
+    navigator.serviceWorker.addEventListener('controllerchange', ()=>window.location.reload());
+    navigator.serviceWorker.addEventListener('message', e=>{
+      if(e.data?.type==='SW_UPDATED') window.location.reload();
     });
   });
 }

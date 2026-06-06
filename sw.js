@@ -1,4 +1,4 @@
-const CACHE = 'ea-admin-v7';
+const CACHE = 'ea-admin-v8';
 const STATIC = ['/enes-admin/icon-192.png', '/enes-admin/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -19,6 +19,13 @@ self.addEventListener('activate', e => {
         clients.forEach(client => client.postMessage({ type: 'SW_UPDATED', version: CACHE }));
       })
   );
+});
+
+// SKIP_WAITING mesajını dinle
+self.addEventListener('message', e => {
+  if (e.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('fetch', e => {

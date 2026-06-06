@@ -733,7 +733,7 @@ async function doLogin() {
       document.getElementById('pw-input').value = '';
     } else {
       sessionStorage.setItem(SESSION_KEY, '1');
-      sessionStorage.setItem('ea_admin_token', d.token);
+      localStorage.setItem('ea_admin_token', d.token);
       document.getElementById('login-err').style.display = 'none';
       showApp();
     }
@@ -744,9 +744,26 @@ async function doLogin() {
   btn.disabled = false; btn.textContent = 'Giriş Yap';
 }
 
+function getTokenPayload(token) {
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g,'+').replace(/_/g,'/')));
+  } catch { return null; }
+}
+
+function isTokenValid(token) {
+  if (!token) return false;
+  const p = getTokenPayload(token);
+  if (!p) return false;
+  // 24 saat geçerli
+  return Date.now() - p.iat < 24 * 60 * 60 * 1000;
+}
+
 function showApp() {
-  const token = sessionStorage.getItem('ea_admin_token');
-  if (!token) {
+  const token = localStorage.getItem('ea_admin_token');
+  if (!token || !isTokenValid(token)) {
+    localStorage.removeItem('ea_admin_token');
+    localStorage.removeItem(SESSION_KEY);
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
     return;
@@ -758,8 +775,8 @@ function showApp() {
 }
 
 function doLogout() {
-  sessionStorage.removeItem(SESSION_KEY);
-  sessionStorage.removeItem('ea_admin_token');
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem('ea_admin_token');
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
   document.getElementById('pw-input').value = '';
@@ -824,9 +841,10 @@ async function saveAll(statusEl) {
   try {
     const r = await fetch(WORKER, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` },
       body: JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList, stockAlerts, visits: _visits, plant_products: ppList, stone_products: spList, equipment: eqList })
     });
+    if (r.status === 401) { toast('Oturum süresi doldu, tekrar giriş yapın.', 'err'); doLogout(); return false; }
     if (!r.ok) throw new Error('HTTP ' + r.status);
     localStorage.setItem('ea_admin_cache', JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList }));
     setSyncDot('ok');
@@ -1309,7 +1327,7 @@ async function clearAlert(i) {
 
 async function fetchMemberCount() {
   try {
-    const res   = await fetch(WORKER + '/admin/users', { headers: { 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` } });
+    const res   = await fetch(WORKER + '/admin/users', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` } });
     const users = await res.json();
     window._memberCount = users.length;
     const dm = document.getElementById('d-members');
@@ -1322,7 +1340,7 @@ async function loadMembers() {
   const el = document.getElementById('members-list');
   if (!el) return;
   try {
-    const res   = await fetch(WORKER + '/admin/users', { headers: { 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` } });
+    const res   = await fetch(WORKER + '/admin/users', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` } });
     const users = await res.json();
     window._memberCount = users.length;
     const dm = document.getElementById('d-members');
@@ -1368,7 +1386,7 @@ async function saveOrder() {
   try {
     const res = await fetch(WORKER + '/admin/orders', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` },
       body: JSON.stringify({ email, order }),
     });
     const data = await res.json();
@@ -1397,7 +1415,7 @@ let campaignList = [];
 
 async function loadCampaigns() {
   try {
-    const res  = await fetch(WORKER + '/admin/campaigns', { headers: { 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` } });
+    const res  = await fetch(WORKER + '/admin/campaigns', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` } });
     campaignList = await res.json();
     renderCampaigns();
   } catch {}
@@ -1436,7 +1454,7 @@ async function saveCampaign() {
   try {
     const res = await fetch(WORKER + '/admin/campaigns', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` },
       body: JSON.stringify(campaignList),
     });
     if (!res.ok) { campaignList.shift(); st.textContent = 'Hata'; st.style.color = 'var(--red)'; return; }
@@ -1457,7 +1475,7 @@ async function deleteCampaign(i) {
   try {
     await fetch(WORKER + '/admin/campaigns', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` },
       body: JSON.stringify(campaignList),
     });
     renderCampaigns();
@@ -1520,7 +1538,7 @@ async function saveIgPost() {
   try {
     const r = await fetch(WORKER + '/admin/instagram', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` },
       body: JSON.stringify(igList)
     });
     if (!r.ok) throw new Error();
@@ -1538,7 +1556,7 @@ async function deleteIgPost(id) {
   try {
     await fetch(WORKER + '/admin/instagram', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` },
       body: JSON.stringify(igList)
     });
     toast('Post silindi', 'err');
@@ -1563,7 +1581,7 @@ function renderIgList() {
 async function loadIgPosts() {
   try {
     const r = await fetch(WORKER + '/admin/instagram', {
-      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('ea_admin_token')||''}` }
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` }
     });
     igList = await r.json();
     renderIgList();

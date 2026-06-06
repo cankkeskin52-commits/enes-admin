@@ -1,9 +1,9 @@
-const CACHE = 'ea-admin-v5';
-const CORE = ['/enes-admin/', '/enes-admin/index.html'];
+const CACHE = 'ea-admin-v6';
+const STATIC = ['/enes-admin/icon-192.png', '/enes-admin/icon-512.png', '/enes-admin/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)));
-  // Hemen aktif ol — bekleme
+  // Statik dosyaları cache'le ama HTML'yi değil
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(STATIC)));
   self.skipWaiting();
 });
 
@@ -13,21 +13,33 @@ self.addEventListener('activate', e => {
       Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
-  // Tüm açık sekmeleri yenile
-  self.clients.matchAll({ type: 'window' }).then(clients => {
-    clients.forEach(client => client.navigate(client.url));
-  });
 });
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  if (!e.request.url.includes('/enes-admin')) return;
-  e.respondWith(
-    // Önce network'ten al, cache'e yaz
-    fetch(e.request).then(r => {
-      const clone = r.clone();
-      caches.open(CACHE).then(c => c.put(e.request, clone));
-      return r;
-    }).catch(() => caches.match(e.request))
-  );
+
+  const url = new URL(e.request.url);
+
+  // HTML dosyaları: HER ZAMAN network'ten al, cache'leme
+  if (url.pathname.endsWith('.html') || url.pathname.endsWith('/')) {
+    e.respondWith(
+      fetch(e.request, { cache: 'no-cache' }).catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // Görseller: cache-first
+  if (/\.(png|jpg|svg|webp|ico)$/.test(url.pathname)) {
+    e.respondWith(
+      caches.match(e.request).then(cached => cached || fetch(e.request).then(r => {
+        const clone = r.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return r;
+      }))
+    );
+    return;
+  }
+
+  // Diğer: network-first
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
 });

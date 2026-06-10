@@ -81,16 +81,34 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 #app{display:flex;flex-direction:column;height:100dvh;}
 
 /* ── LOGIN ── */
-#login-screen{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;}
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;}
 .login-logo{font-size:52px;margin-bottom:8px;}
 .login-title{font-size:20px;font-weight:700;letter-spacing:-.3px;color:var(--teal);margin-bottom:4px;}
-.login-sub{font-size:11px;color:var(--text2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:36px;}
-.login-box{width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;}
+.login-sub{font-size:11px;color:var(--text2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:32px;}
+.login-err{color:var(--red);font-size:12px;text-align:center;display:none;margin-bottom:6px;}
+.login-wave{position:absolute;bottom:0;left:0;right:0;height:120px;opacity:.12;}
+
+/* PIN dots */
+.pin-dots{display:flex;gap:14px;justify-content:center;margin-bottom:28px;}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;transition:background .15s,border-color .15s,transform .12s;}
+.pin-dot.filled{background:var(--teal);border-color:var(--teal);transform:scale(1.15);}
+.pin-dot.err{background:var(--red);border-color:var(--red);}
+
+/* PIN pad */
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:280px;}
+.pin-key{background:var(--bg2);border:.5px solid var(--border);border-radius:14px;height:62px;font-size:22px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .1s,transform .1s;-webkit-tap-highlight-color:transparent;user-select:none;}
+.pin-key:active{background:var(--bg3);transform:scale(.93);}
+.pin-key.del{font-size:18px;color:var(--text2);}
+.pin-key.empty{background:transparent;border-color:transparent;pointer-events:none;}
+
+/* şifreyle geç linki */
+.login-switch{margin-top:20px;font-size:12px;color:var(--text2);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+
+/* şifre kutusu (fallback) */
+.login-box{width:100%;max-width:300px;display:flex;flex-direction:column;gap:12px;}
 .login-input{background:var(--bg2);border:.5px solid var(--border2);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);outline:none;width:100%;}
 .login-input:focus{border-color:var(--teal);}
 .login-btn{background:linear-gradient(135deg,rgba(45,224,204,.25),rgba(58,159,212,.15));border:.5px solid var(--teal);border-radius:12px;padding:14px;font-size:13px;font-weight:700;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;}
-.login-err{color:var(--red);font-size:12px;text-align:center;display:none;}
-.login-wave{position:absolute;bottom:0;left:0;right:0;height:120px;opacity:.12;}
 
 /* ── HEADER ── */
 .hdr{padding:max(calc(var(--st) + 14px),54px) 18px 12px;background:rgba(2,8,16,.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;z-index:20;position:relative;}
@@ -287,12 +305,43 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 </div>
 
 <div id="login-screen" style="display:none">
-  <img src="/enes-admin/logo.svg" style="width:180px;height:180px;margin-bottom:-8px;" alt="Enes Akvaryum">
+  <img src="/enes-admin/logo.svg" style="width:160px;height:160px;margin-bottom:-4px;" alt="Enes Akvaryum">
   <div class="login-sub" style="margin-top:4px;">Yönetim Paneli</div>
-  <div class="login-box">
-    <input class="login-input" id="pw-input" type="password" placeholder="Şifrenizi girin" onkeydown="if(event.key==='Enter')doLogin()">
-    <div class="login-err" id="login-err">Hatalı şifre, tekrar deneyin.</div>
-    <button class="login-btn" onclick="doLogin()">Giriş Yap</button>
+
+  <!-- PIN modu -->
+  <div id="pin-mode" style="display:none;flex-direction:column;align-items:center;">
+    <div class="login-err" id="login-err">Hatalı PIN, tekrar deneyin.</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-pad">
+      <div class="pin-key" onclick="pinKey('1')">1</div>
+      <div class="pin-key" onclick="pinKey('2')">2</div>
+      <div class="pin-key" onclick="pinKey('3')">3</div>
+      <div class="pin-key" onclick="pinKey('4')">4</div>
+      <div class="pin-key" onclick="pinKey('5')">5</div>
+      <div class="pin-key" onclick="pinKey('6')">6</div>
+      <div class="pin-key" onclick="pinKey('7')">7</div>
+      <div class="pin-key" onclick="pinKey('8')">8</div>
+      <div class="pin-key" onclick="pinKey('9')">9</div>
+      <div class="pin-key empty"></div>
+      <div class="pin-key" onclick="pinKey('0')">0</div>
+      <div class="pin-key del" onclick="pinDel()">⌫</div>
+    </div>
+    <div class="login-switch" onclick="showPwMode()">Şifreyle giriş yap</div>
+  </div>
+
+  <!-- Şifre modu (ilk kurulum veya PIN sıfırlama) -->
+  <div id="pw-mode" style="display:none;width:100%;max-width:300px;display:none;flex-direction:column;align-items:center;gap:12px;">
+    <div class="login-err" id="pw-err">Hatalı şifre, tekrar deneyin.</div>
+    <div class="login-box">
+      <input class="login-input" id="pw-input" type="password" placeholder="Şifrenizi girin" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-btn" onclick="doLogin()">Giriş Yap</button>
+    </div>
+    <div class="login-switch" id="back-to-pin" onclick="showPinMode()" style="display:none">← PIN ile giriş yap</div>
   </div>
 </div>
 
@@ -949,18 +998,24 @@ async function doLogin() {
     });
     const d = await r.json();
     if (!r.ok) {
-      document.getElementById('login-err').style.display = 'block';
-      document.getElementById('login-err').textContent = d.error || 'Hatalı şifre';
+      const errEl = document.getElementById('pw-err');
+      errEl.style.display = 'block';
+      errEl.textContent = d.error || 'Hatalı şifre';
       document.getElementById('pw-input').value = '';
     } else {
       sessionStorage.setItem(SESSION_KEY, '1');
       localStorage.setItem('ea_admin_token', d.token);
-      document.getElementById('login-err').style.display = 'none';
-      showApp();
+      // PIN kurulmamışsa PIN kurulum ekranı göster
+      if (!localStorage.getItem('ea_admin_pin')) {
+        askSetPin();
+      } else {
+        showApp();
+      }
     }
   } catch {
-    document.getElementById('login-err').style.display = 'block';
-    document.getElementById('login-err').textContent = 'Bağlantı hatası';
+    const errEl = document.getElementById('pw-err') || document.getElementById('login-err');
+    errEl.style.display = 'block';
+    errEl.textContent = 'Bağlantı hatası';
   }
   btn.disabled = false; btn.textContent = 'Giriş Yap';
 }
@@ -976,8 +1031,100 @@ function isTokenValid(token) {
   if (!token) return false;
   const p = getTokenPayload(token);
   if (!p) return false;
-  // 24 saat geçerli
-  return Date.now() - p.iat < 24 * 60 * 60 * 1000;
+  // 30 gün geçerli
+  return Date.now() - p.iat < 30 * 24 * 60 * 60 * 1000;
+}
+
+/* ══ PIN ══ */
+let _pin = '';
+const PIN_HASH_KEY = 'ea_admin_pin';
+
+function pinSimpleHash(s) {
+  // Basit hash — PIN localStorage'da düz metin değil, karıştırılmış şekilde tutulsun
+  let h = 0;
+  for (let i = 0; i < s.length; i++) { h = (Math.imul(31, h) + s.charCodeAt(i)) | 0; }
+  return (h >>> 0).toString(36) + s.length;
+}
+
+function showPinMode() {
+  // Eğer PIN kurulmamışsa şifre modunu göster
+  if (!localStorage.getItem(PIN_HASH_KEY)) { showPwMode(); return; }
+  _pin = '';
+  updatePinDots();
+  document.getElementById('login-err').style.display = 'none';
+  document.getElementById('pin-mode').style.display = 'flex';
+  document.getElementById('pin-mode').style.flexDirection = 'column';
+  document.getElementById('pin-mode').style.alignItems = 'center';
+  document.getElementById('pw-mode').style.display = 'none';
+}
+
+function showPwMode() {
+  document.getElementById('pin-mode').style.display = 'none';
+  document.getElementById('pw-mode').style.display = 'flex';
+  document.getElementById('pw-err').style.display = 'none';
+  document.getElementById('pw-input').value = '';
+  const backBtn = document.getElementById('back-to-pin');
+  if (backBtn) backBtn.style.display = localStorage.getItem(PIN_HASH_KEY) ? 'block' : 'none';
+  setTimeout(() => document.getElementById('pw-input').focus(), 100);
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const d = document.getElementById('pd' + i);
+    d.classList.toggle('filled', i < _pin.length);
+    d.classList.remove('err');
+  }
+}
+
+function pinKey(k) {
+  if (_pin.length >= 4) return;
+  _pin += k;
+  updatePinDots();
+  if (_pin.length === 4) {
+    setTimeout(checkPin, 120);
+  }
+}
+
+function pinDel() {
+  if (!_pin.length) return;
+  _pin = _pin.slice(0, -1);
+  updatePinDots();
+}
+
+function checkPin() {
+  const stored = localStorage.getItem(PIN_HASH_KEY);
+  if (pinSimpleHash(_pin) === stored) {
+    showApp();
+  } else {
+    for (let i = 0; i < 4; i++) {
+      const d = document.getElementById('pd' + i);
+      d.classList.add('err');
+      d.classList.remove('filled');
+    }
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('login-err').textContent = 'Hatalı PIN';
+    setTimeout(() => {
+      _pin = '';
+      updatePinDots();
+      document.getElementById('login-err').style.display = 'none';
+    }, 900);
+  }
+}
+
+function askSetPin() {
+  const pin = prompt('4 haneli PIN belirleyin (sonraki girişlerde kullanacaksınız):');
+  if (!pin || !/^\d{4}$/.test(pin)) {
+    showApp();
+    return;
+  }
+  const pin2 = prompt('PIN\'i tekrar girin:');
+  if (pin !== pin2) {
+    alert('PIN\'ler eşleşmedi. Şimdilik atlanıyor.');
+    showApp();
+    return;
+  }
+  localStorage.setItem(PIN_HASH_KEY, pinSimpleHash(pin));
+  showApp();
 }
 
 function showApp() {
@@ -987,6 +1134,12 @@ function showApp() {
     localStorage.removeItem(SESSION_KEY);
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
+    // PIN varsa PIN modu, yoksa şifre modu
+    if (localStorage.getItem(PIN_HASH_KEY)) {
+      showPinMode();
+    } else {
+      showPwMode();
+    }
     return;
   }
   document.getElementById('login-screen').style.display = 'none';
@@ -1001,6 +1154,7 @@ function doLogout() {
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
   document.getElementById('pw-input').value = '';
+  if (localStorage.getItem(PIN_HASH_KEY)) { showPinMode(); } else { showPwMode(); }
 }
 
 /* ══ TABS ══ */

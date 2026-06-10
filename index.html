@@ -574,11 +574,23 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-ppname" type="text" placeholder="ör. Seachem Flourish" autocomplete="off"></div>
       <div class="fg"><label>Alt Kategori *</label>
         <select class="fi" id="f-ppsubcat">
-          <option value="yapay">Yapay Bitkiler</option>
-          <option value="gübre">Gübre</option>
-          <option value="co2">CO2 Sistemi</option>
-          <option value="bakım_seti">Bakım Seti</option>
-          <option value="substrat">Substrat</option>
+          <optgroup label="── Bitkiler ──">
+            <option value="yapay">Yapay Bitkiler</option>
+          </optgroup>
+          <optgroup label="── Substrat & Gübre ──">
+            <option value="kum_toprak">Kum & Bitki Toprağı</option>
+            <option value="gübre">Katkı & Gübre</option>
+            <option value="substrat">Substrat</option>
+            <option value="bakım_seti">Makas & Maşa / Bakım Seti</option>
+          </optgroup>
+          <optgroup label="── CO2 Ekipmanları ──">
+            <option value="co2_set">CO2 Komple Set</option>
+            <option value="co2_tup">CO2 Tüp</option>
+            <option value="co2_regulatör">CO2 Regülatör</option>
+            <option value="co2_test">CO2 Test</option>
+            <option value="co2_difüzör">CO2 Difüzör</option>
+            <option value="co2_aksesuar">CO2 Aksesuarlar</option>
+          </optgroup>
         </select>
       </div>
       <div class="fr">
@@ -608,11 +620,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-spname" type="text" placeholder="ör. Lava Taşı" autocomplete="off"></div>
       <div class="fg"><label>Alt Kategori *</label>
         <select class="fi" id="f-spsubcat">
-          <option value="doğal_taş">Doğal Taşlar</option>
-          <option value="çakıl_kum">Çakıl & Kum</option>
-          <option value="kök_ağaç">Kökler & Ağaç</option>
-          <option value="dekor">Dekor Objeleri</option>
-          <option value="arka_plan">Arka Plan</option>
+          <optgroup label="── Akvaryum Dekorları ──">
+            <option value="arka_fon">Arka Fon & Manzaralar</option>
+            <option value="doğal_dekor">Doğal Dekorlar</option>
+            <option value="yapay_dekor">Yapay Dekorlar</option>
+          </optgroup>
+          <optgroup label="── Akvaryum Kumları ──">
+            <option value="doğal_kum">Doğal Kum</option>
+            <option value="renkli_kum">Renkli Kum</option>
+            <option value="bitki_toprağı">Bitki Toprağı</option>
+            <option value="volkanik_kum">Volkanik Kum</option>
+          </optgroup>
+          <optgroup label="── Taşlar & Kökler ──">
+            <option value="doğal_taş">Doğal Taşlar</option>
+            <option value="kök_ağaç">Kökler & Ağaç</option>
+          </optgroup>
         </select>
       </div>
       <div class="fr">
@@ -642,13 +664,33 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-eqname" type="text" placeholder="ör. Eheim Classic 250" autocomplete="off"></div>
       <div class="fg"><label>Alt Kategori *</label>
         <select class="fi" id="f-eqsubcat">
-          <option value="filtre">Filtre</option>
-          <option value="ısıtıcı">Isıtıcı & Termometre</option>
-          <option value="aydınlatma">Aydınlatma</option>
-          <option value="hava_motoru">Hava Motoru</option>
-          <option value="su_arıtma">Su Arıtma</option>
-          <option value="test_kiti">Test Kiti</option>
-          <option value="temizlik">Temizlik Ekipmanı</option>
+          <optgroup label="── Filtreler ──">
+            <option value="dis_filtre">Dış Filtre</option>
+            <option value="ic_filtre">İç Filtre</option>
+            <option value="aski_filtre">Askı Filtre</option>
+            <option value="tepe_filtre">Tepe Filtre</option>
+            <option value="uv_filtre">UV Filtre</option>
+            <option value="pipo_filtre">Pipo Filtre</option>
+            <option value="filtre_malzeme">Filtre Malzemeleri</option>
+          </optgroup>
+          <optgroup label="── Motorlar ──">
+            <option value="hava_motoru">Hava Motoru</option>
+            <option value="dalga_motoru">Dalga Motoru</option>
+            <option value="kafa_sump_motoru">Kafa & Sump Motoru</option>
+          </optgroup>
+          <optgroup label="── Aydınlatma ──">
+            <option value="led">LED Aydınlatma</option>
+            <option value="floresan_lamba">Floresan & Lamba</option>
+          </optgroup>
+          <optgroup label="── Diğer Ekipmanlar ──">
+            <option value="otomatik_yemleme">Otomatik Yemleme</option>
+            <option value="su_duzenleyici">Su Düzenleyici</option>
+            <option value="saglik_bakim">Sağlık & Bakım</option>
+            <option value="test_kiti">Test Kiti</option>
+            <option value="deniz_tuzu">Deniz Tuzu</option>
+            <option value="ısıtıcı">Isıtıcı & Termometre</option>
+            <option value="temizlik">Temizlik Ekipmanı</option>
+          </optgroup>
         </select>
       </div>
       <div class="fr">
@@ -662,6 +704,82 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     </div>
     <div class="sec-lbl">MEVCUT EKİPMANLAR</div>
     <div class="item-list" id="eq-list"></div>
+  </div>
+
+  <!-- Yemler -->
+  <div class="page" id="page-yemler">
+    <div class="sec-lbl">YENİ YEM EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">🐟 Yemler</div>
+      <img id="ym-img-preview" class="img-preview">
+      <div class="photo-row">
+        <label class="photo-btn" for="ym-photo">📷 Fotoğraf Seç</label>
+        <input type="file" id="ym-photo" accept="image/*" style="display:none" onchange="handleYMPhoto(this)">
+        <button class="cancel-img-btn" id="ym-cancel-img" onclick="cancelYMImg()">✕ İptal</button>
+      </div>
+      <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-ymname" type="text" placeholder="ör. JBL Novotab" autocomplete="off"></div>
+      <div class="fg"><label>Alt Kategori *</label>
+        <select class="fi" id="f-ymsubcat">
+          <option value="canli_yem">Canlı Yem</option>
+          <option value="granul_yem">Granül Yem</option>
+          <option value="pul_yem">Pul Yem</option>
+          <option value="tablet_yem">Tablet Yem</option>
+          <option value="otomatik_yemleme">Otomatik Yemleme Cihazı</option>
+          <option value="diger_yem">Diğer Yemler</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Fiyat (₺)</label><input class="fi" id="f-ymprice" type="number" placeholder="0" inputmode="numeric"></div>
+        <div class="fg"><label>Stok</label><input class="fi" id="f-ymstock" type="number" placeholder="—" inputmode="numeric"></div>
+      </div>
+      <div class="fg"><label>Not</label><input class="fi" id="f-ymnote" type="text" placeholder="Kısa açıklama" autocomplete="off"></div>
+      <div class="save-status" id="ym-save-status"></div>
+      <button class="btn-p" id="ym-add-btn" onclick="saveYMItem()">+ Ekle</button>
+      <button class="btn-danger" id="ym-del-btn" onclick="deleteYMItem()" style="display:none">Sil</button>
+    </div>
+    <div class="sec-lbl">MEVCUT YEMLER</div>
+    <div class="item-list" id="ym-list"></div>
+  </div>
+
+  <!-- Akvaryum Aksesuarları -->
+  <div class="page" id="page-aksesuar">
+    <div class="sec-lbl">YENİ AKSESUAR EKLE</div>
+    <div class="add-card">
+      <div class="add-card-title">🔧 Akvaryum Aksesuarları</div>
+      <img id="ak-img-preview" class="img-preview">
+      <div class="photo-row">
+        <label class="photo-btn" for="ak-photo">📷 Fotoğraf Seç</label>
+        <input type="file" id="ak-photo" accept="image/*" style="display:none" onchange="handleAKPhoto(this)">
+        <button class="cancel-img-btn" id="ak-cancel-img" onclick="cancelAKImg()">✕ İptal</button>
+      </div>
+      <div class="fg"><label>Ürün Adı *</label><input class="fi" id="f-akname" type="text" placeholder="ör. Cam Silecek" autocomplete="off"></div>
+      <div class="fg"><label>Alt Kategori *</label>
+        <select class="fi" id="f-aksubcat">
+          <option value="sifon">Sifon</option>
+          <option value="cam_silecegi">Cam Silecek</option>
+          <option value="derece">Derece & Termometre</option>
+          <option value="kepce">Kepçe & Ağ</option>
+          <option value="hava_tasi">Hava Taşı</option>
+          <option value="hava_dagitim">Hava Dağıtım Kiti</option>
+          <option value="cekvalf">Çekvalf</option>
+          <option value="hortum">Hortum</option>
+          <option value="yavruluk">Yavruluk & Üreme Kutusu</option>
+          <option value="yuva_yumurtlama">Yuva & Yumurtlama Taşı</option>
+          <option value="cam_aksesuar">Cam Aksesuarları</option>
+          <option value="diger_aksesuar">Diğer Aksesuarlar</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Fiyat (₺)</label><input class="fi" id="f-akprice" type="number" placeholder="0" inputmode="numeric"></div>
+        <div class="fg"><label>Stok</label><input class="fi" id="f-akstock" type="number" placeholder="—" inputmode="numeric"></div>
+      </div>
+      <div class="fg"><label>Not</label><input class="fi" id="f-aknote" type="text" placeholder="Kısa açıklama" autocomplete="off"></div>
+      <div class="save-status" id="ak-save-status"></div>
+      <button class="btn-p" id="ak-add-btn" onclick="saveAKItem()">+ Ekle</button>
+      <button class="btn-danger" id="ak-del-btn" onclick="deleteAKItem()" style="display:none">Sil</button>
+    </div>
+    <div class="sec-lbl">MEVCUT AKSESUARLAR</div>
+    <div class="item-list" id="ak-list"></div>
   </div>
 
   <!-- INSTAGRAM -->
@@ -731,6 +849,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <div class="bnav-icon">⚙️</div>
       <div class="bnav-label">Ekipman</div>
     </div>
+    <div class="bnav-item" data-tab="yemler" onclick="goTab('yemler')">
+      <div class="bnav-icon">🐡</div>
+      <div class="bnav-label">Yemler</div>
+    </div>
+    <div class="bnav-item" data-tab="aksesuar" onclick="goTab('aksesuar')">
+      <div class="bnav-icon">🔧</div>
+      <div class="bnav-label">Aksesuar</div>
+    </div>
     <div class="bnav-item" data-tab="instagram" onclick="goTab('instagram')">
       <div class="bnav-icon">📸</div>
       <div class="bnav-label">Instagram</div>
@@ -750,12 +876,13 @@ const SESSION_KEY = 'ea_admin_logged';
 
 /* ══ STATE ══ */
 let fishList = [], plantList = [], aqList = [], reviewList = [], subList = [], stockAlerts = [];
-let ppList = [], spList = [], eqList = [];
+let ppList = [], spList = [], eqList = [], ymList = [], akList = [];
 let _visits = 0;
 let editFishIdx = -1, editPlantIdx = -1, editAqIdx = -1;
-let editPPIdx = -1, editSPIdx = -1, editEQIdx = -1;
+let editPPIdx = -1, editSPIdx = -1, editEQIdx = -1, editYMIdx = -1, editAKIdx = -1;
 let fishImgUrl = '', plantImgUrl = '', aqImgUrl = '';
-let ppImgUrl = '', spImgUrl = '', eqImgUrl = '';
+let ppImgUrl = '', spImgUrl = '', eqImgUrl = '', ymImgUrl = '', akImgUrl = '';
+let ymFile = null, akFile = null;
 let fishFile = null, plantFile = null, aqFile = null;
 let ppFile = null, spFile = null, eqFile = null;
 let selStars = 3;
@@ -913,6 +1040,8 @@ async function loadData() {
     ppList = d.plant_products || [];
     spList = d.stone_products || [];
     eqList = d.equipment || [];
+    ymList = d.yemler || [];
+    akList = d.aksesuarlar || [];
     _visits = d.visits || 0;
     localStorage.setItem('ea_admin_cache', JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList }));
     setSyncDot('ok');
@@ -936,7 +1065,7 @@ async function saveAll(statusEl) {
     const r = await fetch(WORKER, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ea_admin_token')||''}` },
-      body: JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList, stockAlerts, visits: _visits, plant_products: ppList, stone_products: spList, equipment: eqList })
+      body: JSON.stringify({ fish: fishList, plants: plantList, aquariums: aqList, reviews: reviewList, subscribers: subList, stockAlerts, visits: _visits, plant_products: ppList, stone_products: spList, equipment: eqList, yemler: ymList, aksesuarlar: akList })
     });
     if (r.status === 401) { toast('Oturum süresi doldu, tekrar giriş yapın.', 'err'); doLogout(); return false; }
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -974,6 +1103,8 @@ function renderAll() {
   renderPPList();
   renderSPList();
   renderEQList();
+  renderYMList();
+  renderAKList();
 }
 
 /* ══ CLOUDINARY UPLOAD ══ */
@@ -1919,6 +2050,164 @@ function editEQItem(i) {
   document.getElementById('eq-del-btn').style.display = 'block';
   goTab('equipment');
   document.getElementById('page-equipment').scrollTop = 0;
+}
+
+/* ══ YEMLER (YM) ══ */
+function handleYMPhoto(inp) {
+  const f = inp.files[0]; if (!f) return;
+  ymFile = f;
+  const prev = document.getElementById('ym-img-preview');
+  prev.src = URL.createObjectURL(f); prev.style.display = 'block';
+  document.getElementById('ym-cancel-img').style.display = 'inline-flex';
+}
+function cancelYMImg() {
+  ymFile = null; ymImgUrl = '';
+  const prev = document.getElementById('ym-img-preview');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('ym-photo').value = '';
+  document.getElementById('ym-cancel-img').style.display = 'none';
+}
+function resetYMForm() {
+  document.getElementById('f-ymname').value = '';
+  document.getElementById('f-ymsubcat').selectedIndex = 0;
+  document.getElementById('f-ymprice').value = '';
+  document.getElementById('f-ymstock').value = '';
+  document.getElementById('f-ymnote').value = '';
+  cancelYMImg();
+  editYMIdx = -1;
+  document.getElementById('ym-add-btn').textContent = '+ Ekle';
+  document.getElementById('ym-del-btn').style.display = 'none';
+}
+async function saveYMItem() {
+  const name = document.getElementById('f-ymname').value.trim();
+  if (!name) { toast('Ürün adı zorunlu', 'err'); return; }
+  const statusEl = 'ym-save-status';
+  document.getElementById(statusEl).textContent = '⏳ Kaydediliyor...';
+  let imgUrl = ymImgUrl;
+  if (ymFile) { imgUrl = await uploadCloudinary(ymFile) || ''; }
+  const item = {
+    name,
+    subcategory: document.getElementById('f-ymsubcat').value,
+    price: Number(document.getElementById('f-ymprice').value) || 0,
+    stock: document.getElementById('f-ymstock').value !== '' ? Number(document.getElementById('f-ymstock').value) : null,
+    note: document.getElementById('f-ymnote').value.trim(),
+    img: imgUrl,
+    outOfStock: false
+  };
+  if (editYMIdx >= 0) { ymList[editYMIdx] = item; } else { ymList.unshift(item); }
+  const ok = await saveAll(statusEl);
+  if (ok) { toast('✓ Kaydedildi', 'ok'); resetYMForm(); renderYMList(); }
+}
+function deleteYMItem() {
+  if (editYMIdx < 0) return;
+  ymList.splice(editYMIdx, 1);
+  saveAll().then(() => { toast('Silindi', 'ok'); resetYMForm(); renderYMList(); });
+}
+function renderYMList() {
+  const el = document.getElementById('ym-list'); if (!el) return;
+  if (!ymList.length) { el.innerHTML = '<div style="padding:12px;color:var(--text2);font-size:13px;">Henüz ürün yok.</div>'; return; }
+  el.innerHTML = ymList.map((p, i) => `
+    <div class="item-card" onclick="editYMItem(${i})">
+      ${p.img ? `<img class="item-thumb" src="${p.img}" alt="">` : '<div class="item-thumb-placeholder">🐡</div>'}
+      <div class="item-info">
+        <div class="item-name">${p.name}</div>
+        <div class="item-meta">${p.subcategory || ''} ${p.price ? '· ' + Number(p.price).toLocaleString('tr-TR') + ' ₺' : ''}</div>
+      </div>
+      <div class="item-price" style="flex-shrink:0;font-size:12px;">›</div>
+    </div>`).join('');
+}
+function editYMItem(i) {
+  const p = ymList[i]; editYMIdx = i;
+  document.getElementById('f-ymname').value = p.name || '';
+  const sc = document.getElementById('f-ymsubcat');
+  for (let o of sc.options) if (o.value === p.subcategory) { o.selected = true; break; }
+  document.getElementById('f-ymprice').value = p.price || '';
+  document.getElementById('f-ymstock').value = p.stock != null ? p.stock : '';
+  document.getElementById('f-ymnote').value = p.note || '';
+  if (p.img) { ymImgUrl = p.img; const prev = document.getElementById('ym-img-preview'); prev.src = p.img; prev.style.display = 'block'; document.getElementById('ym-cancel-img').style.display = 'inline-flex'; }
+  document.getElementById('ym-add-btn').textContent = '✓ Güncelle';
+  document.getElementById('ym-del-btn').style.display = 'block';
+  goTab('yemler');
+  document.getElementById('page-yemler').scrollTop = 0;
+}
+
+/* ══ AKSESUARLAR (AK) ══ */
+function handleAKPhoto(inp) {
+  const f = inp.files[0]; if (!f) return;
+  akFile = f;
+  const prev = document.getElementById('ak-img-preview');
+  prev.src = URL.createObjectURL(f); prev.style.display = 'block';
+  document.getElementById('ak-cancel-img').style.display = 'inline-flex';
+}
+function cancelAKImg() {
+  akFile = null; akImgUrl = '';
+  const prev = document.getElementById('ak-img-preview');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('ak-photo').value = '';
+  document.getElementById('ak-cancel-img').style.display = 'none';
+}
+function resetAKForm() {
+  document.getElementById('f-akname').value = '';
+  document.getElementById('f-aksubcat').selectedIndex = 0;
+  document.getElementById('f-akprice').value = '';
+  document.getElementById('f-akstock').value = '';
+  document.getElementById('f-aknote').value = '';
+  cancelAKImg();
+  editAKIdx = -1;
+  document.getElementById('ak-add-btn').textContent = '+ Ekle';
+  document.getElementById('ak-del-btn').style.display = 'none';
+}
+async function saveAKItem() {
+  const name = document.getElementById('f-akname').value.trim();
+  if (!name) { toast('Ürün adı zorunlu', 'err'); return; }
+  const statusEl = 'ak-save-status';
+  document.getElementById(statusEl).textContent = '⏳ Kaydediliyor...';
+  let imgUrl = akImgUrl;
+  if (akFile) { imgUrl = await uploadCloudinary(akFile) || ''; }
+  const item = {
+    name,
+    subcategory: document.getElementById('f-aksubcat').value,
+    price: Number(document.getElementById('f-akprice').value) || 0,
+    stock: document.getElementById('f-akstock').value !== '' ? Number(document.getElementById('f-akstock').value) : null,
+    note: document.getElementById('f-aknote').value.trim(),
+    img: imgUrl,
+    outOfStock: false
+  };
+  if (editAKIdx >= 0) { akList[editAKIdx] = item; } else { akList.unshift(item); }
+  const ok = await saveAll(statusEl);
+  if (ok) { toast('✓ Kaydedildi', 'ok'); resetAKForm(); renderAKList(); }
+}
+function deleteAKItem() {
+  if (editAKIdx < 0) return;
+  akList.splice(editAKIdx, 1);
+  saveAll().then(() => { toast('Silindi', 'ok'); resetAKForm(); renderAKList(); });
+}
+function renderAKList() {
+  const el = document.getElementById('ak-list'); if (!el) return;
+  if (!akList.length) { el.innerHTML = '<div style="padding:12px;color:var(--text2);font-size:13px;">Henüz ürün yok.</div>'; return; }
+  el.innerHTML = akList.map((p, i) => `
+    <div class="item-card" onclick="editAKItem(${i})">
+      ${p.img ? `<img class="item-thumb" src="${p.img}" alt="">` : '<div class="item-thumb-placeholder">🔧</div>'}
+      <div class="item-info">
+        <div class="item-name">${p.name}</div>
+        <div class="item-meta">${p.subcategory || ''} ${p.price ? '· ' + Number(p.price).toLocaleString('tr-TR') + ' ₺' : ''}</div>
+      </div>
+      <div class="item-price" style="flex-shrink:0;font-size:12px;">›</div>
+    </div>`).join('');
+}
+function editAKItem(i) {
+  const p = akList[i]; editAKIdx = i;
+  document.getElementById('f-akname').value = p.name || '';
+  const sc = document.getElementById('f-aksubcat');
+  for (let o of sc.options) if (o.value === p.subcategory) { o.selected = true; break; }
+  document.getElementById('f-akprice').value = p.price || '';
+  document.getElementById('f-akstock').value = p.stock != null ? p.stock : '';
+  document.getElementById('f-aknote').value = p.note || '';
+  if (p.img) { akImgUrl = p.img; const prev = document.getElementById('ak-img-preview'); prev.src = p.img; prev.style.display = 'block'; document.getElementById('ak-cancel-img').style.display = 'inline-flex'; }
+  document.getElementById('ak-add-btn').textContent = '✓ Güncelle';
+  document.getElementById('ak-del-btn').style.display = 'block';
+  goTab('aksesuar');
+  document.getElementById('page-aksesuar').scrollTop = 0;
 }
 </script>
 </body>
